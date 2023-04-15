@@ -1,0 +1,16 @@
+{
+	"name" : "Modday2",
+	"description" : "Test mod",
+	"author" : "Rosuav",
+	"contact" : "rosuav@gmail.com",
+	"version" : "0.0.1",
+	"blt_version" : 2,
+	"priority" : 1,
+	"color" : "0 0 255",
+	"hooks" : [
+		{ 
+			"hook_id" : "lib/setups/gamesetup",
+			"script_path" : "chat.lua"
+		}
+	]
+}
