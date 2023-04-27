@@ -8,9 +8,9 @@
 	"priority" : 1,
 	"color" : "0 0 255",
 	"hooks" : [
-		{ 
+		{
 			"hook_id" : "lib/setups/gamesetup",
-			"script_path" : "chat.lua"
+			"script_path" : "mod.lua"
 		}
 	]
 }

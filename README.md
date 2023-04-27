@@ -3,8 +3,8 @@ PAYDAY 2 modding
 
 Goals:
 
-* Get any sort of modding going. A hello-world that just logs when something
-  happens.
-* Notify on your last body bag. Trigger off bagging a body, or maybe periodically.
-  If you have pagers available but no body bags, notify.
 * Auto-reload.
+  - If you switch to a weapon with no bullets in the mag, start reloading
+  - If you empty the weapon, start reloading (sometimes happens automatically already)
+  - If you stop sprinting and mag is empty, start reloading
+  - And only if you have some reserve ammo.
