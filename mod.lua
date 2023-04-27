@@ -14,3 +14,37 @@ function(self, data)
 		say("That was your last body bag! Grab " .. (4 - pagers_used) .. " more!")
 	end
 end)
+
+--[[ Previous attempts at the autoreload idea, which may have reference value in triggering other actions
+function check_autoreload()
+	say("Checking for autoreload")
+	local weapon_unit = managers.player:equipped_weapon_unit()
+	if weapon_unit then
+		local clip = weapon_unit:base()._ammo_remaining_in_clip
+		say("Clip " .. clip)
+		if weapon_unit:base():can_reload() and clip < 1 then
+			-- weapon_unit:base():on_reload() -- this is a free reload, not "trigger the reload animation"
+		end
+	end
+end
+
+Hooks:PostHook(RaycastWeaponBase, "fire", "auto_reload",
+function(self, from_pos, direction, dmg_mul, shoot_player, spread_mul, autohit_mul, suppr_mul, target_unit)
+	if self._setup.user_unit == managers.player:player_unit() then
+		-- It's the player who just fired.
+		say("Clip left " .. self._ammo_remaining_in_clip)
+		check_autoreload()
+	end
+end)
+--]]
+
+Hooks:PreHook(PlayerStandard, "_check_action_reload", "auto_reload",
+function(self, t, input)
+	local weapon_unit = managers.player:equipped_weapon_unit()
+	if weapon_unit then
+		local clip = weapon_unit:base()._ammo_remaining_in_clip
+		if clip < 1 and weapon_unit:base():can_reload() then
+			input.btn_reload_press = true
+		end
+	end
+end)
