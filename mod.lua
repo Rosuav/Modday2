@@ -43,10 +43,8 @@ local sixteenths = {0.19509032201612825, 0.5555702330196022, 0.8314696123025452,
 local labels = {"N", "NNE", "NE", "ENE"}
 
 function check_compass(self, input)
-	-- Where am I? If you're pressing both Reload and Interact at once, you're lost, and need to
-	-- be told where you are. Okay, that's not exactly what I do, but I say where you're facing.
-	-- Note that when your mask is off, simply pressing Interact will do this.
-	if input.btn_interact_press then
+	-- Inspect your weapon and your compass at once.
+	if input.btn_cash_inspect_press then
 		-- self._cam_fwd_flat is (x, y, 0) representing a unit vector (ie x*x+y*y will always
 		-- equal 1). We want the angle of that vector, then divide that by 1/16th of a circle
 		-- and round to the nearest cardinal position. However, since trignometric functions
@@ -85,9 +83,7 @@ end)
 
 Hooks:PreHook(PlayerStandard, "_check_action_reload", "auto_reload",
 function(self, t, input)
-	if input.btn_reload_press then
-		check_compass(self, input)
-	end
+	check_compass(self, input)
 	-- Autoreload: if you need to reload and can reload, assume you're pressing the reload key
 	local weapon_unit = managers.player:equipped_weapon_unit()
 	if weapon_unit then
