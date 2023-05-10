@@ -73,7 +73,7 @@ function check_compass(self, input)
 			label = string.gsub(label, "N", "S")
 		end
 		say("You are facing: " .. label)
-		managers.experience:give_experience(1000, true)
+		-- managers.experience:give_experience(1000, true)
 	end
 end
 
