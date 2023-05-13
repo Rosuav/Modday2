@@ -77,11 +77,24 @@ function check_compass(self, input)
 	end
 end
 
+-- The player may be in any of a number of game states. They have different restrictions on what
+-- you can and can't do, but we want the compass check to be available in all of them.
+-- Others to consider: PlayerClean, PlayerCarry (both subclasses of PlayerStandard so maybe fine?)
+-- Unsure which modes are triggered when.
+
+-- No equipment carried (eg Golden Grin Casino, stealth entrance, prior to collecting gear)
+Hooks:PreHook(PlayerCivilian, "_check_action_interact", "compass",
+function(self, t, input)
+	check_compass(self, input)
+end)
+
+-- Casing mode (stealth heist before masking up)
 Hooks:PreHook(PlayerMaskOff, "_check_action_interact", "compass",
 function(self, t, input)
 	check_compass(self, input)
 end)
 
+-- Normal situation, the majority of situations
 Hooks:PreHook(PlayerStandard, "_check_action_reload", "auto_reload",
 function(self, t, input)
 	check_compass(self, input)
