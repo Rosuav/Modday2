@@ -42,7 +42,7 @@ end)
 local sixteenths = {0.19509032201612825, 0.5555702330196022, 0.8314696123025452, 0.9807852804032304}
 local labels = {"N", "NNE", "NE", "ENE"}
 
-function check_compass(self, input)
+function check_compass(self, input, mode)
 	-- Inspect your weapon and your compass at once.
 	if input.btn_cash_inspect_press then
 		-- self._cam_fwd_flat is (x, y, 0) representing a unit vector (ie x*x+y*y will always
@@ -72,7 +72,7 @@ function check_compass(self, input)
 		if self._cam_fwd_flat.y < 0 then
 			label = string.gsub(label, "N", "S")
 		end
-		say("You are facing: " .. label)
+		say("You are " .. mode .. " and facing: " .. label)
 		-- managers.experience:give_experience(1000, true)
 	end
 end
@@ -85,19 +85,43 @@ end
 -- No equipment carried (eg Golden Grin Casino, stealth entrance, prior to collecting gear)
 Hooks:PreHook(PlayerCivilian, "_check_action_interact", "compass",
 function(self, t, input)
-	check_compass(self, input)
+	check_compass(self, input, "a Civilian")
 end)
 
 -- Casing mode (stealth heist before masking up)
 Hooks:PreHook(PlayerMaskOff, "_check_action_interact", "compass",
 function(self, t, input)
-	check_compass(self, input)
+	check_compass(self, input, "Casing")
+end)
+
+-- Others
+Hooks:PreHook(PlayerDriving, "_check_action_exit_vehicle", "compass",
+function(self, t, input)
+	-- Hooking exit_vehicle means that, if you're a passenger and able to shoot, you
+	-- will get double messages. Unideal. Unsure about passenger not able to shoot.
+	check_compass(self, input, "Driving")
+end)
+Hooks:PreHook(PlayerClean, "_check_action_interact", "compass",
+function(self, t, input)
+	check_compass(self, input, "Clean") -- Never seen this one
+end)
+Hooks:PreHook(PlayerFatal, "_check_action_interact", "compass",
+function(self, t, input)
+	check_compass(self, input, "Fatally Wounded") -- Bleeding out, completely sideways, can't shoot
+end)
+Hooks:PreHook(PlayerCarry, "_check_action_reload", "compass",
+function(self, t, input)
+	check_compass(self, input, "Carrying") -- if we lose this, does Compass stop working while carrying something?
+end)
+Hooks:PreHook(PlayerTurret, "_check_action_reload", "compass",
+function(self, t, input)
+	check_compass(self, input, "a Turret") -- Never seen this one either
 end)
 
 -- Normal situation, the majority of situations
 Hooks:PreHook(PlayerStandard, "_check_action_reload", "auto_reload",
 function(self, t, input)
-	check_compass(self, input)
+	check_compass(self, input, "Getting Rich")
 	-- Autoreload: if you need to reload and can reload, assume you're pressing the reload key
 	local weapon_unit = managers.player:equipped_weapon_unit()
 	if weapon_unit then
