@@ -81,6 +81,8 @@ end
 -- you can and can't do, but we want the compass check to be available in all of them.
 -- Others to consider: PlayerClean, PlayerCarry (both subclasses of PlayerStandard so maybe fine?)
 -- Unsure which modes are triggered when.
+-- Note that having hooks on a subclass MAY stop the superclass hook from firing. Unsure. For safety,
+-- hook different functions or ensure that the subclass does everything the superclass would.
 
 -- No equipment carried (eg Golden Grin Casino, stealth entrance, prior to collecting gear)
 Hooks:PreHook(PlayerCivilian, "_check_action_interact", "compass",
@@ -109,13 +111,9 @@ Hooks:PreHook(PlayerFatal, "_check_action_interact", "compass",
 function(self, t, input)
 	check_compass(self, input, "Fatally Wounded") -- Bleeding out, completely sideways, can't shoot
 end)
-Hooks:PreHook(PlayerCarry, "_check_action_reload", "compass",
+Hooks:PreHook(PlayerCarry, "_check_action_interact", "compass",
 function(self, t, input)
 	check_compass(self, input, "Carrying") -- if we lose this, does Compass stop working while carrying something?
-end)
-Hooks:PreHook(PlayerTurret, "_check_action_reload", "compass",
-function(self, t, input)
-	check_compass(self, input, "a Turret") -- Never seen this one either
 end)
 
 -- Normal situation, the majority of situations
