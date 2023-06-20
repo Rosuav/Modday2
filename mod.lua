@@ -12,8 +12,9 @@ function(self, data)
 	local pagers_used = managers.groupai:state():get_nr_successful_alarm_pager_bluffs()
 	if pagers_used < 4 and self._local_player_body_bags < 1 then
 		say("That was your last body bag! Grab " .. (4 - pagers_used) .. " more!")
-		managers.groupai:state()._nr_successful_alarm_pager_bluffs = 0
 	end
+	say("Pagers used: " .. pagers_used .. ". Resetting to zero.")
+	managers.groupai:state()._nr_successful_alarm_pager_bluffs = 0
 end)
 
 --[[ Previous attempts at the autoreload idea, which may have reference value in triggering other actions
