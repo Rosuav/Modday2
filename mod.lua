@@ -131,3 +131,28 @@ function(self, t, input)
 		end
 	end
 end)
+
+-- Run some initialization checks
+Hooks:PostHook(PlayerManager, "spawned_player", "modday2_initialization",
+function(self, id, unit)
+	-- Imagine if your AI companions could lend you their cable ties.
+	-- If there are three AIs, assume that they have the default of
+	-- two ties apiece, and grant you six more (doubling your stash
+	-- if you have Forced Friendship). However, if there are two AIs,
+	-- assume that one of them hands to you, and the other might hand
+	-- to the other player. And if there's only one AI, well, magic
+	-- happens, and he shares his two ties among the three of you, so
+	-- you get one each. (These figures assume that everyone's using
+	-- this same mod, even if not everyone is.)
+	-- UNFORTUNATELY! Twelve cable ties exceeds the game's limit of
+	-- nine. So if you're playing solo and have Forced Friendship, you
+	-- miss out on three ties. Can we buff that maximum??
+	DelayedCalls:Add("MoreTiesPls", 0.5, function()
+		-- The bots don't exist as the player spawns. Give them half a
+		-- second to arrive. (Can we hook on that too?)
+		local bots = managers.groupai:state():amount_of_ai_criminals()
+		if bots == 3 then self:add_cable_ties(6) end
+		if bots == 2 then self:add_cable_ties(2) end
+		if bots == 1 then self:add_cable_ties(1) end
+	end)
+end)
