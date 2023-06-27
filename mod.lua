@@ -75,6 +75,21 @@ function check_compass(self, input, mode)
 		if self._cam_fwd_flat.y < 0 then
 			label = string.gsub(label, "N", "S")
 		end
+		-- Testing, needs a proper place (maybe this? probably not).
+		-- Query how many enemies there are on the map.
+		local enemies, civilians = 0, 0
+		for _, data in pairs(managers.enemy:all_enemies()) do
+			-- Hack for testing: Highlight everyone as they get counted
+			data.unit:contour():add("mark_enemy_damage_bonus", true, 2)
+			managers.network:session():send_to_peers_synched("spot_enemy", data.unit)
+			enemies = enemies + 1
+		end
+		for _, data in pairs(managers.enemy:all_civilians()) do
+			data.unit:contour():add("mark_enemy", true, 1)
+			managers.network:session():send_to_peers_synched("spot_enemy", data.unit)
+			civilians = civilians + 1
+		end
+		label = label .. " (enem " .. enemies .. ", civ " .. civilians .. ")"
 		say("You are " .. mode .. " and facing: " .. label)
 		-- managers.experience:give_experience(1000, true)
 	end
