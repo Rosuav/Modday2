@@ -178,3 +178,55 @@ end)
 -- This particular one makes the body bag upgrade (that normally adds 1 to your max body bags, for
 -- a total of 2) instead add 3 (for a total of 4 if you have that skill, or the normal 1 if not).
 -- For upgrades that can happen more than once, there'll be an inner table with multiple values.
+
+-- TODO: Govern this with a skill. Open question: What tier of skill?
+-- Maybe attach it to Marksman Ace, T2 Sharpshooter skill? Or replace that altogether?
+Hooks:PostHook(NewRaycastWeaponBase, "check_highlight_unit", "survival_instincts",
+function(self, unit)
+	return -- hacked out until I figure out how to put it behind a skill
+	-- Replicate the logic from the original: if highlighting wouldn't be done,
+	-- survival instincts highlighting won't be either.
+	if not self._can_highlight then return end
+	if not self._can_highlight_with_skill and self:is_second_sight_on() then return end
+	if unit:in_slot(8) and alive(unit:parent()) then unit = unit:parent() or unit end
+	if not unit or not unit:base() then return end
+	if unit:character_damage() and unit:character_damage().dead and unit:character_damage():dead() then return end
+	local is_enemy_in_cool_state = managers.enemy:is_enemy(unit) and not managers.groupai:state():enemy_weapons_hot()
+	if not is_enemy_in_cool_state and not unit:base().can_be_marked then return end
+	-- Okay. Highlighting would have indeed been done.
+	-- Scan all enemies and cameras to see if any of them would be able to see this one.
+	local can_be_seen = false
+	local unit_pos = unit:position()
+	for _, data in pairs(managers.enemy:all_enemies()) do
+		-- can_be_seen = true
+	end
+	for _, cam in pairs(SecurityCamera.cameras) do
+		if alive(cam) and cam:enabled() and not cam:base():destroyed() then
+			-- Logic replicated from SecurityCamera:_upd_acquire_new_attention_objects
+			-- but instead of looking at all "objects worthy of attention" (eg corpses),
+			-- we just look at the current unit.
+			local camself = cam:base()
+			local cam_pos = camself._pos
+			local cam_fwd = camself._look_fwd
+			if cam:base():_detection_angle_and_dis_chk(cam_pos, cam_fwd, nil, {}, unit_pos) then
+				local vis_ray = camself._unit:raycast("ray", cam_pos, unit_pos, "slot_mask", camself._visibility_slotmask, "ray_type", "ai_vision")
+
+				-- is it okay to just say vis_ray.unit == unit?
+				if not vis_ray or vis_ray.unit:key() == unit:key() then
+					local in_cone = true
+
+					if camself._cone_angle ~= nil then
+						local dir = (unit_pos - cam_pos):normalized()
+						in_cone = cam_fwd:angle(dir) <= camself._cone_angle * 0.5
+					end
+
+					if in_cone then can_be_seen = true end
+				end
+			end
+		end
+	end
+	if not can_be_seen then return end
+	--say("Can be seen!")
+	unit:contour():add("tmp_invulnerable", true, 1) -- Add a temporary yellow highlight
+	managers.network:session():send_to_peers_synched("spot_enemy", unit)
+end)
