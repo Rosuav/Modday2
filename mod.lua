@@ -208,7 +208,7 @@ function(self, unit)
 			local camself = cam:base()
 			local cam_pos = camself._pos
 			local cam_fwd = camself._look_fwd
-			if cam:base():_detection_angle_and_dis_chk(cam_pos, cam_fwd, nil, {}, unit_pos) then
+			if cam_pos and cam:base():_detection_angle_and_dis_chk(cam_pos, cam_fwd, nil, {}, unit_pos) then
 				local vis_ray = camself._unit:raycast("ray", cam_pos, unit_pos, "slot_mask", camself._visibility_slotmask, "ray_type", "ai_vision")
 
 				-- is it okay to just say vis_ray.unit == unit?
