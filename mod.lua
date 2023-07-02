@@ -183,7 +183,7 @@ end)
 -- Maybe attach it to Marksman Ace, T2 Sharpshooter skill? Or replace that altogether?
 Hooks:PostHook(NewRaycastWeaponBase, "check_highlight_unit", "survival_instincts",
 function(self, unit)
-	return -- hacked out until I figure out how to put it behind a skill
+	if true then return end -- hacked out until I figure out how to put it behind a skill
 	-- Replicate the logic from the original: if highlighting wouldn't be done,
 	-- survival instincts highlighting won't be either.
 	if not self._can_highlight then return end
