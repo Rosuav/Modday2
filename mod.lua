@@ -172,3 +172,9 @@ function(self, id, unit)
 		if bots == 1 then self:add_cable_ties(1) end
 	end)
 end)
+
+-- To adjust the effects of different skill/perk upgrades, do this (here at top level):
+-- tweak_data.upgrades.values.bodybags_bag.quantity[1] = 3
+-- This particular one makes the body bag upgrade (that normally adds 1 to your max body bags, for
+-- a total of 2) instead add 3 (for a total of 4 if you have that skill, or the normal 1 if not).
+-- For upgrades that can happen more than once, there'll be an inner table with multiple values.
