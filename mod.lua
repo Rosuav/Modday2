@@ -198,16 +198,20 @@ function(self, unit)
 	local can_be_seen = false
 	local unit_pos = unit:position()
 	if not unit_pos then return end
+	-- Calibrate both Pythagorean distance and the mvector3.direction() distance
+	-- against what a rangefinder says.
+	-- local my_pos = managers.player:local_player():movement():m_head_pos()
+	-- local tmp_vec1 = Vector3()
+	-- local dis = mvector3.direction(tmp_vec1, my_pos, unit_pos)
+	-- local dis2 = math.pow(my_pos.x - unit_pos.x, 2) + math.pow(my_pos.y - unit_pos.y, 2) + math.pow(my_pos.z - unit_pos.z, 2)
+	-- say("Distance " .. dis .. " or " .. math.pow(dis2, 0.5))
+	-- Conclusion: Both distance calculations agree that the map unit is the centimeter.
 	for _, data in pairs(managers.enemy:all_enemies()) do
 		-- NOTE: For the purposes of this check, we assume a max distance of 10,000 and
 		-- max angle of 120. These are by far the most common values in the tweakdata
 		-- tables, with some enemy types having lower vision, and snipers having wider
 		-- FOV, but this is a good default for stealth.
 		local man_pos = data.unit:movement():m_head_pos()
-		-- TODO: Calibrate both Pythagorean distance and the mvector3.direction() distance
-		-- against what a rangefinder says.
-		--local dis = math.pow(man_pos.x - unit_pos.x, 2) + math.pow(man_pos.y - unit_pos.y, 2) + math.pow(man_pos.z - unit_pos.z, 2)
-		--if dis < 100000000 then
 		local tmp_vec1 = Vector3()
 		local dis = mvector3.direction(tmp_vec1, man_pos, unit_pos)
 		if dis < 10000 then
