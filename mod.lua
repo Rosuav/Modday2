@@ -211,10 +211,11 @@ function(self, unit)
 		-- max angle of 120. These are by far the most common values in the tweakdata
 		-- tables, with some enemy types having lower vision, and snipers having wider
 		-- FOV, but this is a good default for stealth.
+		-- TODO: What's the detection range for a corpse? Is that lower than 100m?
 		local man_pos = data.unit:movement():m_head_pos()
 		local tmp_vec1 = Vector3()
 		local dis = mvector3.direction(tmp_vec1, man_pos, unit_pos)
-		if dis < 10000 then
+		if data.unit ~= unit and dis < 10000 then
 			local fwd = data.unit:movement():m_head_rot():z()
 			local angle = mvector3.angle(fwd, tmp_vec1)
 
@@ -225,7 +226,15 @@ function(self, unit)
 				if not vis_ray or vis_ray.unit:key() == unit:key() then
 					can_be_seen = true
 					-- say("Enemy can see enemy at dist " .. dis)
+					-- For debugging: Highlight the one who can see the target.
+					data.unit:contour():add("medic_heal", true, 1) -- Green highlight
+					managers.network:session():send_to_peers_synched("spot_enemy", data.unit)
+					--say("Visible! " .. angle .. " / " .. angle_max)
+				else
+					--say("Blocked: " .. angle .. " / " .. angle_max)
 				end
+			else
+				--say("Not vis: " .. angle .. " / " .. angle_max)
 			end
 		end
 	end
