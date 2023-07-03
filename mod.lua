@@ -197,8 +197,22 @@ function(self, unit)
 	-- Scan all enemies and cameras to see if any of them would be able to see this one.
 	local can_be_seen = false
 	local unit_pos = unit:position()
+	if not unit_pos then return end
 	for _, data in pairs(managers.enemy:all_enemies()) do
-		-- can_be_seen = true
+		-- NOTE: For the purposes of this check, we assume a max distance of 10,000 and
+		-- max angle of 120. These are by far the most common values in the tweakdata
+		-- tables, with some enemy types having lower vision, and snipers having wider
+		-- FOV, but this is a good default for stealth.
+		local man_pos = data.unit:movement():m_head_pos()
+		local dis = math.pow(man_pos.x - unit_pos.x, 2) + math.pow(man_pos.y - unit_pos.y, 2) + math.pow(man_pos.z - unit_pos.z, 2)
+		if dis < 100000000 then
+			local vis_ray = World:raycast("ray", man_pos, unit_pos, "slot_mask", managers.slot:get_mask("AI_visibility"), "ray_type", "ai_vision")
+
+			if not vis_ray or vis_ray.unit:key() == u_key then
+				can_be_seen = true
+				say("Enemy can see enemy at dist " .. dis)
+			end
+		end
 	end
 	for _, cam in pairs(SecurityCamera.cameras) do
 		if alive(cam) and cam:enabled() and not cam:base():destroyed() then
@@ -209,7 +223,7 @@ function(self, unit)
 			local cam_pos = camself._pos
 			local cam_fwd = camself._look_fwd
 
-			if cam_pos and unit_pos then
+			if cam_pos then
 				local dis = math.pow(cam_pos.x - unit_pos.x, 2) + math.pow(cam_pos.y - unit_pos.y, 2) + math.pow(cam_pos.z - unit_pos.z, 2)
 				if dis < math.pow(camself._range, 2) then
 					local vis_ray = camself._unit:raycast("ray", cam_pos, unit_pos, "slot_mask", camself._visibility_slotmask, "ray_type", "ai_vision")
