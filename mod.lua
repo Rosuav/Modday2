@@ -204,13 +204,24 @@ function(self, unit)
 		-- tables, with some enemy types having lower vision, and snipers having wider
 		-- FOV, but this is a good default for stealth.
 		local man_pos = data.unit:movement():m_head_pos()
-		local dis = math.pow(man_pos.x - unit_pos.x, 2) + math.pow(man_pos.y - unit_pos.y, 2) + math.pow(man_pos.z - unit_pos.z, 2)
-		if dis < 100000000 then
-			local vis_ray = World:raycast("ray", man_pos, unit_pos, "slot_mask", managers.slot:get_mask("AI_visibility"), "ray_type", "ai_vision")
+		-- TODO: Calibrate both Pythagorean distance and the mvector3.direction() distance
+		-- against what a rangefinder says.
+		--local dis = math.pow(man_pos.x - unit_pos.x, 2) + math.pow(man_pos.y - unit_pos.y, 2) + math.pow(man_pos.z - unit_pos.z, 2)
+		--if dis < 100000000 then
+		local tmp_vec1 = Vector3()
+		local dis = mvector3.direction(tmp_vec1, man_pos, unit_pos)
+		if dis < 10000 then
+			local fwd = data.unit:movement():m_head_rot():z()
+			local angle = mvector3.angle(fwd, tmp_vec1)
 
-			if not vis_ray or vis_ray.unit:key() == u_key then
-				can_be_seen = true
-				say("Enemy can see enemy at dist " .. dis)
+			local angle_max = math.lerp(180, 120, math.clamp((dis - 150) / 700, 0, 1))
+			if angle < angle_max then
+				local vis_ray = World:raycast("ray", man_pos, unit_pos, "slot_mask", managers.slot:get_mask("AI_visibility"), "ray_type", "ai_vision")
+
+				if not vis_ray or vis_ray.unit:key() == unit:key() then
+					can_be_seen = true
+					-- say("Enemy can see enemy at dist " .. dis)
+				end
 			end
 		end
 	end
