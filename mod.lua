@@ -208,19 +208,23 @@ function(self, unit)
 			local camself = cam:base()
 			local cam_pos = camself._pos
 			local cam_fwd = camself._look_fwd
-			if cam_pos and cam:base():_detection_angle_and_dis_chk(cam_pos, cam_fwd, nil, {}, unit_pos) then
-				local vis_ray = camself._unit:raycast("ray", cam_pos, unit_pos, "slot_mask", camself._visibility_slotmask, "ray_type", "ai_vision")
 
-				-- is it okay to just say vis_ray.unit == unit?
-				if not vis_ray or vis_ray.unit:key() == unit:key() then
-					local in_cone = true
+			if cam_pos and unit_pos then
+				local dis = math.pow(cam_pos.x - unit_pos.x, 2) + math.pow(cam_pos.y - unit_pos.y, 2) + math.pow(cam_pos.z - unit_pos.z, 2)
+				if dis < math.pow(camself._range, 2) then
+					local vis_ray = camself._unit:raycast("ray", cam_pos, unit_pos, "slot_mask", camself._visibility_slotmask, "ray_type", "ai_vision")
 
-					if camself._cone_angle ~= nil then
-						local dir = (unit_pos - cam_pos):normalized()
-						in_cone = cam_fwd:angle(dir) <= camself._cone_angle * 0.5
+					-- is it okay to just say vis_ray.unit == unit?
+					if not vis_ray or vis_ray.unit:key() == unit:key() then
+						local in_cone = true
+
+						if camself._cone_angle ~= nil then
+							local dir = (unit_pos - cam_pos):normalized()
+							in_cone = cam_fwd:angle(dir) <= camself._cone_angle * 0.5
+						end
+
+						if in_cone then can_be_seen = true end
 					end
-
-					if in_cone then can_be_seen = true end
 				end
 			end
 		end
