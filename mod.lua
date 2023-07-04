@@ -179,6 +179,10 @@ end)
 -- a total of 2) instead add 3 (for a total of 4 if you have that skill, or the normal 1 if not).
 -- For upgrades that can happen more than once, there'll be an inner table with multiple values.
 
+function heading_from_vector(vec)
+	return math.floor(mvector3.angle(vec, math.Y))
+end
+
 -- TODO: Govern this with a skill. Open question: What tier of skill?
 -- Maybe attach it to Marksman Ace, T2 Sharpshooter skill? Or replace that altogether?
 Hooks:PostHook(NewRaycastWeaponBase, "check_highlight_unit", "survival_instincts",
@@ -206,6 +210,7 @@ function(self, unit)
 	-- local dis2 = math.pow(my_pos.x - unit_pos.x, 2) + math.pow(my_pos.y - unit_pos.y, 2) + math.pow(my_pos.z - unit_pos.z, 2)
 	-- say("Distance " .. dis .. " or " .. math.pow(dis2, 0.5))
 	-- Conclusion: Both distance calculations agree that the map unit is the centimeter.
+	local msg = heading_from_vector(unit:movement():m_head_rot():z())
 	for _, data in pairs(managers.enemy:all_enemies()) do
 		-- NOTE: For the purposes of this check, we assume a max distance of 10,000 and
 		-- max angle of 120. These are by far the most common values in the tweakdata
@@ -217,9 +222,16 @@ function(self, unit)
 		local dis = mvector3.direction(tmp_vec1, man_pos, unit_pos)
 		if data.unit ~= unit and dis < 10000 then
 			local fwd = data.unit:movement():m_head_rot():z()
-			local angle = mvector3.angle(fwd, tmp_vec1)
+			local angle = mvector3.angle(fwd, unit_pos - man_pos)
+			-- say(msg .. " - " .. heading_from_vector(fwd) .. "/" .. heading_from_vector(tmp_vec1) .. " = " .. angle)
 
-			local angle_max = math.lerp(180, 120, math.clamp((dis - 150) / 700, 0, 1))
+			-- Note that coplogicbase.lua lerps from 180 down to 120, but somehow this is
+			-- giving me the wrong results if I use those numbers. So we're calculating
+			-- the boresight angle and ensuring that we're within +/- 60°. Note also that,
+			-- even though logically this should be the range (-60, 60), the angle() method
+			-- always returns positive numbers, so we just look at (0, 60) and can thus use
+			-- a simple inequality check.
+			local angle_max = math.lerp(90, 60, math.clamp((dis - 150) / 700, 0, 1))
 			if angle < angle_max then
 				local vis_ray = World:raycast("ray", man_pos, unit_pos, "slot_mask", managers.slot:get_mask("AI_visibility"), "ray_type", "ai_vision")
 
@@ -229,12 +241,12 @@ function(self, unit)
 					-- For debugging: Highlight the one who can see the target.
 					data.unit:contour():add("medic_heal", true, 1) -- Green highlight
 					managers.network:session():send_to_peers_synched("spot_enemy", data.unit)
-					--say("Visible! " .. angle .. " / " .. angle_max)
+					say("Visible! " .. angle .. " / " .. angle_max)
 				else
-					--say("Blocked: " .. angle .. " / " .. angle_max)
+					say("Blocked: " .. angle .. " / " .. angle_max)
 				end
 			else
-				--say("Not vis: " .. angle .. " / " .. angle_max)
+				say("Not vis: " .. angle .. " / " .. angle_max)
 			end
 		end
 	end
@@ -267,6 +279,14 @@ function(self, unit)
 			end
 		end
 	end
+	local my_pos = managers.player:local_player():movement():m_head_pos()
+	-- local tmp_vec1 = Vector3()
+	-- mvector3.direction(tmp_vec1, my_pos, unit_pos)
+	local tmp_vec1 = unit_pos - my_pos
+	local fwd = managers.player:local_player():movement():m_head_rot():z()
+	local angle1 = math.floor(mvector3.angle(fwd, tmp_vec1))
+	local angle2 = math.floor(mvector3.angle(tmp_vec1, fwd))
+	say(heading_from_vector(fwd) .. " / " .. heading_from_vector(tmp_vec1) .. " = " .. angle1 .. " = " .. angle2)
 	if not can_be_seen then return end
 	--say("Can be seen!")
 	unit:contour():add("tmp_invulnerable", true, 1) -- Add a temporary yellow highlight
