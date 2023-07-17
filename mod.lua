@@ -179,6 +179,15 @@ end)
 -- a total of 2) instead add 3 (for a total of 4 if you have that skill, or the normal 1 if not).
 -- For upgrades that can happen more than once, there'll be an inner table with multiple values.
 
+-- Glasses off, everyone. You can't see a thing.
+-- Fun fact: This can result in guards that hear a non-silenced drill, walk up to it, but have no
+-- idea what this thing is that's right in front of him.
+--~ for _, chartype in pairs(tweak_data.character.presets.detection) do
+--~ 	for _, mode in pairs(chartype) do
+--~ 		mode.dis_max = 1 -- centimeter.
+--~ 	end
+--~ end
+
 function heading_from_vector(vec)
 	return math.floor(mvector3.angle(vec, math.Y))
 end
