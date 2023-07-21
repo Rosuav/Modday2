@@ -7,15 +7,28 @@ function say(msg)
 	managers.chat:_receive_message(1, "NOTICE", msg, Color("29A4F6"))
 end
 
+-- Set values in here to true to enable cheat-level hacks. Most of them were developed
+-- in order to tinker with other features, but they're also useful in the same way that
+-- other cheat codes are, so I'm keeping them :) Plus, it's hilariously funny how easily
+-- the AI can get confused when you mess with some of these things.
+modday2_hacks = {
+	-- pager_reset = 1, -- Reset pager usage every time you bag someone.
+	-- wireframes = 1, -- Show wireframes for all enemies - great for debugging Survival Instincts, which still isn't working (2023-07-21)
+	-- more_stuff = 1, -- Give more stuff. See below for details on exactly what it gives.
+	-- glasses_off = 1, -- Transport the Payday Gang to a myopia utopia!
+	-- smekalka = 1, -- Teach Russian ingenuity to the dozers...
+}
+
 Hooks:PostHook(PlayerManager, 'on_used_body_bag', 'alert_out_of_bags',
 function(self, data)
 	local pagers_used = managers.groupai:state():get_nr_successful_alarm_pager_bluffs()
 	if pagers_used < 4 and self._local_player_body_bags < 1 then
 		say("That was your last body bag! Grab " .. (4 - pagers_used) .. " more!")
 	end
-	-- Hack for testing.
-	-- say("Pagers used: " .. pagers_used .. ". Resetting to zero.")
-	-- managers.groupai:state()._nr_successful_alarm_pager_bluffs = 0
+	if modday2_hacks.pager_reset then
+		say("Pagers used: " .. pagers_used .. ". Resetting to zero.")
+		managers.groupai:state()._nr_successful_alarm_pager_bluffs = 0
+	end
 end)
 
 --[[ Previous attempts at the autoreload idea, which may have reference value in triggering other actions
@@ -79,14 +92,18 @@ function check_compass(self, input, mode)
 		-- Query how many enemies there are on the map.
 		local enemies, civilians = 0, 0
 		for _, data in pairs(managers.enemy:all_enemies()) do
-			-- Hack for testing: Highlight everyone as they get counted
-			-- data.unit:contour():add("mark_enemy_damage_bonus", true, 2)
-			-- managers.network:session():send_to_peers_synched("spot_enemy", data.unit)
+			if modday2_hacks.wireframes then
+				-- Hack for testing: Highlight everyone as they get counted
+				data.unit:contour():add("mark_enemy_damage_bonus", true, 2)
+				managers.network:session():send_to_peers_synched("spot_enemy", data.unit)
+			end
 			enemies = enemies + 1
 		end
 		for _, data in pairs(managers.enemy:all_civilians()) do
-			-- data.unit:contour():add("mark_enemy", true, 1)
-			-- managers.network:session():send_to_peers_synched("spot_enemy", data.unit)
+			if modday2_hacks.wireframes then
+				data.unit:contour():add("mark_enemy", true, 1)
+				managers.network:session():send_to_peers_synched("spot_enemy", data.unit)
+			end
 			civilians = civilians + 1
 		end
 		label = label .. " (enem " .. enemies .. ", civ " .. civilians .. ")"
@@ -174,7 +191,9 @@ function(self, id, unit)
 end)
 
 -- To adjust the effects of different skill/perk upgrades, do this (here at top level):
--- tweak_data.upgrades.values.bodybags_bag.quantity[1] = 3
+if modday2_hacks.more_stuff then
+	tweak_data.upgrades.values.bodybags_bag.quantity[1] = 3
+end
 -- This particular one makes the body bag upgrade (that normally adds 1 to your max body bags, for
 -- a total of 2) instead add 3 (for a total of 4 if you have that skill, or the normal 1 if not).
 -- For upgrades that can happen more than once, there'll be an inner table with multiple values.
@@ -182,11 +201,20 @@ end)
 -- Glasses off, everyone. You can't see a thing.
 -- Fun fact: This can result in guards that hear a non-silenced drill, walk up to it, but have no
 -- idea what this thing is that's right in front of him.
---~ for _, chartype in pairs(tweak_data.character.presets.detection) do
---~ 	for _, mode in pairs(chartype) do
---~ 		mode.dis_max = 1 -- centimeter.
---~ 	end
---~ end
+if modday2_hacks.glasses_off then
+	for _, chartype in pairs(tweak_data.character.presets.detection) do
+		for _, mode in pairs(chartype) do
+			mode.dis_max = 1 -- centimeter.
+		end
+	end
+	for _, mode in pairs(tweak_data.attention.settings) do
+		mode.max_range = 1 -- centimeter also, presumably
+	end
+end
+-- Replace armor with ingenuity, and I don't mean the helicopter
+if modday2_hacks.smekalka then
+	tweak_data.character.tank.HEALTH_INIT = 1
+end
 
 function heading_from_vector(vec)
 	return math.floor(mvector3.angle(vec, math.Y))
