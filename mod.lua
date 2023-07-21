@@ -192,11 +192,14 @@ end)
 
 -- To adjust the effects of different skill/perk upgrades, do this (here at top level):
 if modday2_hacks.more_stuff then
+	-- This particular one makes the body bag upgrade (that normally adds 1 to your max body bags, for
+	-- a total of 2) instead add 3 (for a total of 4 if you have that skill, or the normal 1 if not).
+	-- For upgrades that can happen more than once, there'll be an inner table with multiple values.
 	tweak_data.upgrades.values.bodybags_bag.quantity[1] = 3
+	-- Or this changes the multiplier for the armor bonus from Iron Man - normally 30% bonus (1.3).
+	-- Note that this does NOT affect the menu, only in-game.
+	tweak_data.upgrades.values.player.armor_multiplier[1] = 1.5
 end
--- This particular one makes the body bag upgrade (that normally adds 1 to your max body bags, for
--- a total of 2) instead add 3 (for a total of 4 if you have that skill, or the normal 1 if not).
--- For upgrades that can happen more than once, there'll be an inner table with multiple values.
 
 -- Glasses off, everyone. You can't see a thing.
 -- Fun fact: This can result in guards that hear a non-silenced drill, walk up to it, but have no
