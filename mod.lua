@@ -18,6 +18,7 @@ modday2_hacks = {
 	-- glasses_off = 1, -- Transport the Payday Gang to a myopia utopia!
 	-- smekalka = 1, -- Teach Russian ingenuity to the dozers...
 	-- insurance = 1, -- Buy murder insurance before you go.
+	-- dark_cameras = 1, -- Cameras go dark.
 }
 
 Hooks:PostHook(PlayerManager, 'on_used_body_bag', 'alert_out_of_bags',
@@ -222,6 +223,15 @@ end
 -- Killing civvies happens sometimes during testing.
 if modday2_hacks.insurance then
 	tweak_data.upgrades.values.player.cleaner_cost_multiplier[1] = 0
+end
+
+if modday2_hacks.dark_cameras then
+	Hooks:PostHook(SecurityCamera, "set_detection_enabled", "dark_cameras",
+	function(self, state, settings, mission_element)
+		-- say("Camera has range " .. self._range)
+		self._range = 1
+		self._suspicion_range = 1
+	end)
 end
 
 function heading_from_vector(vec)
