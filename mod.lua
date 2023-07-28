@@ -17,6 +17,7 @@ modday2_hacks = {
 	-- more_stuff = 1, -- Give more stuff. See below for details on exactly what it gives.
 	-- glasses_off = 1, -- Transport the Payday Gang to a myopia utopia!
 	-- smekalka = 1, -- Teach Russian ingenuity to the dozers...
+	-- insurance = 1, -- Buy murder insurance before you go.
 }
 
 Hooks:PostHook(PlayerManager, 'on_used_body_bag', 'alert_out_of_bags',
@@ -217,6 +218,10 @@ end
 -- Replace armor with ingenuity, and I don't mean the helicopter
 if modday2_hacks.smekalka then
 	tweak_data.character.tank.HEALTH_INIT = 1
+end
+-- Killing civvies happens sometimes during testing.
+if modday2_hacks.insurance then
+	tweak_data.upgrades.values.player.cleaner_cost_multiplier[1] = 0
 end
 
 function heading_from_vector(vec)
