@@ -28,7 +28,7 @@ function(self, data)
 		say("That was your last body bag! Grab " .. (4 - pagers_used) .. " more!")
 	end
 	if modday2_hacks.pager_reset then
-		say("Pagers used: " .. pagers_used .. ". Resetting to zero.")
+		-- say("Pagers used: " .. pagers_used .. ". Resetting to zero.")
 		managers.groupai:state()._nr_successful_alarm_pager_bluffs = 0
 	end
 end)
