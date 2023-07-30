@@ -250,6 +250,17 @@ function(self, unit)
 	if unit:in_slot(8) and alive(unit:parent()) then unit = unit:parent() or unit end
 	if not unit or not unit:base() then return end
 	if unit:character_damage() and unit:character_damage().dead and unit:character_damage():dead() then return end
+
+	-- Govern this some other way? Implication is: "squint at 'em, see if there's anything to steal".
+	if unit:character_damage() and unit:character_damage()._pickup and unit:character_damage()._pickup ~= "ammo" then
+		unit:contour():add("tmp_invulnerable", true, 1) -- Can we get a different colour?
+		managers.network:session():send_to_peers_synched("spot_enemy", unit)
+		-- Force the item to be dropped immediately
+		-- unit:character_damage():drop_pickup()
+		-- unit:character_damage()._pickup = nil
+	end
+	-- if true then return end
+
 	local is_enemy_in_cool_state = managers.enemy:is_enemy(unit) and not managers.groupai:state():enemy_weapons_hot()
 	if not is_enemy_in_cool_state and not unit:base().can_be_marked then return end
 	-- Okay. Highlighting would have indeed been done.
