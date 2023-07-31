@@ -20,6 +20,7 @@ modday2_hacks = {
 	-- insurance = 1, -- Buy murder insurance before you go.
 	-- dark_cameras = 1, -- Cameras go dark.
 	-- conquistador = 1, -- NOBODY inspects the Spanish Acquisition!
+	-- sep_field = 1, -- Someone Else's Problem field makes you invisible to all civilians (as long as you aren't a threat).
 }
 
 Hooks:PostHook(PlayerManager, 'on_used_body_bag', 'alert_out_of_bags',
@@ -252,6 +253,14 @@ if modday2_hacks.dark_cameras then
 		self._range = 1
 		self._suspicion_range = 1
 	end)
+end
+if modday2_hacks.sep_field then
+	for _, mode in pairs(tweak_data.attention.settings) do
+		-- NOTE: This currently won't stop civilians from noticing you bash someone up.
+		if mode.filter == "non_combatant" then
+			mode.max_range = 1 -- Non-combatants can only see you at a range of 1cm
+		end
+	end
 end
 
 function heading_from_vector(vec)
