@@ -30,3 +30,27 @@ Current features:
     - But USA side, "north hallway" is bottom of map! South-east hallway is top right! WUT.
     - 0 is up on the blueprints (both USA and Mexico sides).
   - Conclusion: Preplanning is sometimes just plain wrong.
+* A bunch of hacks/cheats for debugging. Enable them by uncommenting lines near the top. Some
+  of their descriptions are deliberately vague so they won't get desynchronized with the code.
+  CAUTION: Use of these cheats in multiplayer may be considered, well, cheating. Do not use
+  any of these without the consent of every player you're with, and ensure that all players
+  have the same settings. These features are NOT GUARANTEED TO WORK in multiplayer, and have
+  exhibited a number of quirks, including:
+  - Players getting kicked as cheater for using more_stuff
+  - Additional assets simply despawning
+  - Pager resets not getting synchronized, and the alarm being set off
+  Recommendation: Use these cheats in offline mode only.
+* These hacks can also be used to create alternate game modes. For example:
+  - Kill Bill: pager_reset, more_stuff, insurance, and optionally dark_cameras.
+    "I went on what the movies refer to as a Sneaking Rampage of Revenge. I snuck
+    around. I rampaged. And I got bloody satisfaction."
+    Pagers are still a thing, but pager count gets reset every time you bag someone. Crank
+    the body bag case count way up. Remain in full stealth, and finish with the map empty.
+    Necessary skills: Sixth Sense aced, Cleaner aced
+    Great on maps where you just wish more people would die. First World Bank, Murky Station,
+    etc, with lots more people than you can normally kill, but it's really hard to choose who
+    gets to have a bullet today. Use dark_cameras on maps where you can't eliminate the
+    operator, otherwise take cameras out the conventional way.
+  - Biker Sniper: wireframes
+    Big Oil day one. Use the Inspect key to see where everyone is. Your goal: Eliminate the
+    bikers without the alarm being raised, without ever stepping inside the fence.

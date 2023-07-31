@@ -14,7 +14,7 @@ end
 modday2_hacks = {
 	-- pager_reset = 1, -- Reset pager usage every time you bag someone.
 	-- wireframes = 1, -- Show wireframes for all enemies - great for debugging Survival Instincts, which still isn't working (2023-07-21)
-	-- more_stuff = 1, -- Give more stuff. See below for details on exactly what it gives.
+	-- more_stuff = 1, -- Give more stuff. See below for details on exactly what it gives. CAUTION: May cause you to be autokicked as a cheater.
 	-- glasses_off = 1, -- Transport the Payday Gang to a myopia utopia!
 	-- smekalka = 1, -- Teach Russian ingenuity to the dozers...
 	-- insurance = 1, -- Buy murder insurance before you go.
