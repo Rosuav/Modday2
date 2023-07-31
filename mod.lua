@@ -19,6 +19,7 @@ modday2_hacks = {
 	-- smekalka = 1, -- Teach Russian ingenuity to the dozers...
 	-- insurance = 1, -- Buy murder insurance before you go.
 	-- dark_cameras = 1, -- Cameras go dark.
+	-- conquistador = 1, -- NOBODY inspects the Spanish Acquisition!
 }
 
 Hooks:PostHook(PlayerManager, 'on_used_body_bag', 'alert_out_of_bags',
@@ -111,6 +112,25 @@ function check_compass(self, input, mode)
 		label = label .. " (enem " .. enemies .. ", civ " .. civilians .. ")"
 		say("You are " .. mode .. " and facing: " .. label)
 		-- managers.experience:give_experience(1000, true)
+		if modday2_hacks.conquistador then
+			for peer_id, data in pairs(managers.player:get_all_synced_carry()) do
+				-- This isn't enough to trigger game advancement.
+				local peer_id = managers.network:session() and managers.network:session():local_peer():id()
+				if not tweak_data.carry[data.carry_id].skip_exit_secure then
+					managers.loot:secure(data.carry_id, data.multiplier, nil, peer_id)
+				end
+				managers.hud:remove_teammate_carry_info(HUDManager.PLAYER_PANEL)
+				managers.hud:temp_hide_carry_bag()
+				managers.player:update_removed_synced_carry_to_peers()
+				managers.player:set_player_state("standard")
+				-- eg on Yacht Heist, gotta secure eight bundles - this
+				-- doesn't count towards the eight.
+				-- These don't help either:
+				-- managers.loot:_check_triggers("amount")
+				-- managers.loot:_check_triggers("total_amount")
+				-- managers.loot:_check_triggers("report_only")
+			end
+		end
 	end
 end
 
