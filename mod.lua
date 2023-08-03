@@ -97,7 +97,11 @@ function check_compass(self, input, mode)
 		local enemies, civilians = 0, 0
 		for _, data in pairs(managers.enemy:all_enemies()) do
 			if modday2_hacks.wireframes then
-				-- Hack for testing: Highlight everyone as they get counted
+				-- Hack for testing: Highlight everyone who has an item
+--~ 				if data.unit:character_damage() and data.unit:character_damage()._pickup and data.unit:character_damage()._pickup ~= "ammo" then
+--~ 					data.unit:contour():add("tmp_invulnerable", true, 10)
+--~ 					managers.network:session():send_to_peers_synched("spot_enemy", data.unit)
+--~ 				end
 				data.unit:contour():add("mark_enemy_damage_bonus", true, 2)
 				managers.network:session():send_to_peers_synched("spot_enemy", data.unit)
 			end
@@ -115,21 +119,36 @@ function check_compass(self, input, mode)
 		-- managers.experience:give_experience(1000, true)
 		if modday2_hacks.conquistador then
 			for peer_id, data in pairs(managers.player:get_all_synced_carry()) do
+				say("Synced carry, id " .. data.carry_id)
 				-- This isn't enough to trigger game advancement.
-				local peer_id = managers.network:session() and managers.network:session():local_peer():id()
-				if not tweak_data.carry[data.carry_id].skip_exit_secure then
-					managers.loot:secure(data.carry_id, data.multiplier, nil, peer_id)
-				end
-				managers.hud:remove_teammate_carry_info(HUDManager.PLAYER_PANEL)
-				managers.hud:temp_hide_carry_bag()
-				managers.player:update_removed_synced_carry_to_peers()
-				managers.player:set_player_state("standard")
+--~ 				local peer_id = managers.network:session() and managers.network:session():local_peer():id()
+--~ 				if not tweak_data.carry[data.carry_id].skip_exit_secure then
+--~ 					managers.loot:secure(data.carry_id, data.multiplier, nil, peer_id)
+--~ 				end
+--~ 				managers.hud:remove_teammate_carry_info(HUDManager.PLAYER_PANEL)
+--~ 				managers.hud:temp_hide_carry_bag()
+--~ 				managers.player:update_removed_synced_carry_to_peers()
+--~ 				managers.player:set_player_state("standard")
 				-- eg on Yacht Heist, gotta secure eight bundles - this
 				-- doesn't count towards the eight.
 				-- These don't help either:
 				-- managers.loot:_check_triggers("amount")
 				-- managers.loot:_check_triggers("total_amount")
 				-- managers.loot:_check_triggers("report_only")
+				-- Instead, try handing it to any player who isn't carrying anything.
+				for _, team_ai in pairs(managers.groupai:state():all_AI_criminals()) do
+					local carry_data = team_ai and team_ai.unit and team_ai.unit:movement() and team_ai.unit:movement():carry_data()
+					if not carry_data then
+						-- Okay, we found a bot with room to hold something
+						-- Sigh. This doesn't work either.
+						--team_ai.unit:movement():set_carrying_bag(carry_data._unit)
+--~ 						managers.hud:remove_teammate_carry_info(HUDManager.PLAYER_PANEL)
+--~ 						managers.hud:temp_hide_carry_bag()
+--~ 						managers.player:update_removed_synced_carry_to_peers()
+--~ 						managers.player:set_player_state("standard")
+						break
+					end
+				end
 			end
 		end
 	end
