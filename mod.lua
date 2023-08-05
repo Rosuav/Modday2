@@ -219,9 +219,9 @@ function(self, id, unit)
 	-- happens, and he shares his two ties among the three of you, so
 	-- you get one each. (These figures assume that everyone's using
 	-- this same mod, even if not everyone is.)
-	-- UNFORTUNATELY! Twelve cable ties exceeds the game's limit of
+	-- Unfortunately, twelve cable ties exceeds the normal limit of
 	-- nine. So if you're playing solo and have Forced Friendship, you
-	-- miss out on three ties. Can we buff that maximum??
+	-- miss out on three ties. Solution? Buff the maximum.
 	DelayedCalls:Add("MoreTiesPls", 0.5, function()
 		-- The bots don't exist as the player spawns. Give them half a
 		-- second to arrive. (Can we hook on that too?)
@@ -231,6 +231,7 @@ function(self, id, unit)
 		if bots == 1 then self:add_cable_ties(1) end
 	end)
 end)
+tweak_data.equipments.specials.cable_tie.max_quantity = 20
 
 -- To adjust the effects of different skill/perk upgrades, do this (here at top level):
 if modday2_hacks.more_stuff then
@@ -241,6 +242,9 @@ if modday2_hacks.more_stuff then
 	-- Or this changes the multiplier for the armor bonus from Iron Man - normally 30% bonus (1.3).
 	-- Note that this does NOT affect the menu, only in-game.
 	tweak_data.upgrades.values.player.armor_multiplier[1] = 1.5
+	-- Limits can also be adjusted.
+	tweak_data.equipments.specials.cable_tie.max_quantity = 50
+	tweak_data.equipments.specials.cable_tie.quantity = 40
 end
 
 -- Glasses off, everyone. You can't see a thing.
