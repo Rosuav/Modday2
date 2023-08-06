@@ -13,7 +13,9 @@ end
 -- the AI can get confused when you mess with some of these things.
 modday2_hacks = {
 	-- pager_reset = 1, -- Reset pager usage every time you bag someone.
-	-- wireframes = 1, -- Show wireframes for all enemies - great for debugging Survival Instincts, which still isn't working (2023-07-21)
+	-- wireframes_enemies = 1, -- Show wireframes for all enemies
+	-- wireframes_civvies = 1, -- Show wireframes for all civilians
+	-- wireframes_loot = 1, -- Show wireframes for those who are carrying something (eg keycard)
 	-- more_stuff = 1, -- Give more stuff. See below for details on exactly what it gives. CAUTION: May cause you to be autokicked as a cheater.
 	-- glasses_off = 1, -- Transport the Payday Gang to a myopia utopia!
 	-- smekalka = 1, -- Teach Russian ingenuity to the dozers...
@@ -97,12 +99,11 @@ function check_compass(self, input, mode)
 		-- Query how many enemies there are on the map.
 		local enemies, civilians = 0, 0
 		for _, data in pairs(managers.enemy:all_enemies()) do
-			if modday2_hacks.wireframes then
-				-- Hack for testing: Highlight everyone who has an item
---~ 				if data.unit:character_damage() and data.unit:character_damage()._pickup and data.unit:character_damage()._pickup ~= "ammo" then
---~ 					data.unit:contour():add("tmp_invulnerable", true, 10)
---~ 					managers.network:session():send_to_peers_synched("spot_enemy", data.unit)
---~ 				end
+			if modday2_hacks.wireframes_loot and data.unit:character_damage() and data.unit:character_damage()._pickup and data.unit:character_damage()._pickup ~= "ammo" then
+				data.unit:contour():add("tmp_invulnerable", true, 10)
+				managers.network:session():send_to_peers_synched("spot_enemy", data.unit)
+			end
+			if modday2_hacks.wireframes_enemies then
 				data.unit:contour():add("mark_enemy_damage_bonus", true, 2)
 				managers.network:session():send_to_peers_synched("spot_enemy", data.unit)
 			end
@@ -121,7 +122,7 @@ function check_compass(self, input, mode)
 			enemies = enemies + 1
 		end
 		for _, data in pairs(managers.enemy:all_civilians()) do
-			if modday2_hacks.wireframes then
+			if modday2_hacks.wireframes_civvies then
 				data.unit:contour():add("mark_enemy", true, 1)
 				managers.network:session():send_to_peers_synched("spot_enemy", data.unit)
 			end
