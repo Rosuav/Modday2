@@ -21,6 +21,7 @@ modday2_hacks = {
 	-- dark_cameras = 1, -- Cameras go dark.
 	-- conquistador = 1, -- NOBODY inspects the Spanish Acquisition!
 	-- sep_field = 1, -- Someone Else's Problem field makes you invisible to all civilians (as long as you aren't a threat).
+	-- death_grange = 1, -- You're asking for trouble, you are!
 }
 
 Hooks:PostHook(PlayerManager, 'on_used_body_bag', 'alert_out_of_bags',
@@ -104,6 +105,18 @@ function check_compass(self, input, mode)
 --~ 				end
 				data.unit:contour():add("mark_enemy_damage_bonus", true, 2)
 				managers.network:session():send_to_peers_synched("spot_enemy", data.unit)
+			end
+			if modday2_hacks.death_grange then
+				-- Take out only those who don't have pagers?
+				-- if data.unit:character_damage() and not data.unit:unit_data().has_alarm_pager then
+				-- Or take out everyone, and suppress their pagers?
+				if data.unit:character_damage() then
+					data.unit:unit_data().has_alarm_pager = false
+					-- Take 'em out.
+					data.unit:character_damage():damage_mission({
+						damage = data.unit:character_damage()._HEALTH_INIT + 1
+					})
+				end
 			end
 			enemies = enemies + 1
 		end
