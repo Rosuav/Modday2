@@ -424,3 +424,37 @@ function(self, unit)
 	unit:contour():add("tmp_invulnerable", true, 1) -- Add a temporary yellow highlight
 	managers.network:session():send_to_peers_synched("spot_enemy", unit)
 end)
+
+small_count, carry_count = 0, 0
+Hooks:PostHook(SmallLootInteractionExt, "init", "increment_loot_count",
+function(self, unit)
+	small_count = small_count + 1
+	say("Loot: " .. small_count .. "+ sm, " .. carry_count .. " carry")
+end)
+Hooks:PostHook(SmallLootInteractionExt, "destroy", "decrement_loot_count",
+function(self, unit)
+	small_count = small_count - 1
+	say("Loot: " .. small_count .. "- sm, " .. carry_count .. " carry")
+end)
+-- Never seen any of these.
+--~ money_wrap_count = 0
+--~ Hooks:PostHook(MoneyWrapInteractionExt, "init", "increment_loot_count",
+--~ function(self, unit)
+--~ 	money_wrap_count = money_wrap_count + 1
+--~ 	say("Money wrap: " .. money_wrap_count .. "+")
+--~ end)
+--~ Hooks:PostHook(MoneyWrapInteractionExt, "destroy", "decrement_loot_count",
+--~ function(self, unit)
+--~ 	money_wrap_count = money_wrap_count - 1
+--~ 	say("Money wrap: " .. money_wrap_count .. "-")
+--~ end)
+Hooks:PostHook(CarryInteractionExt, "init", "increment_loot_count",
+function(self, unit)
+	carry_count = carry_count + 1
+	say("Loot: " .. small_count .. " sm, " .. carry_count .. "+ carry")
+end)
+Hooks:PostHook(CarryInteractionExt, "destroy", "decrement_loot_count",
+function(self, unit)
+	carry_count = carry_count - 1
+	say("Loot: " .. small_count .. " sm, " .. carry_count .. "- carry")
+end)
