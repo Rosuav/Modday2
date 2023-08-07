@@ -426,6 +426,14 @@ function(self, unit)
 	managers.network:session():send_to_peers_synched("spot_enemy", unit)
 end)
 
+-- Attempt to count loot remaining on the map
+-- TODO: Loot inside openables does not exist until they are opened. So to usefully
+-- show remaining loot, it'll need to count openables, which I haven't yet figured out.
+-- Plus, there often seem to be some interactions that I just can't find. Does that mean
+-- there's loot on the map that I haven't located, or phantom entries that don't really
+-- exist? Need to figure this out; it might be that they're inactive (see set_active()),
+-- or it might be that I can point to them on the map.
+-- TODO: Show this in the HUD rather than as a countdown.
 small_count, carry_count = 0, 0
 Hooks:PostHook(SmallLootInteractionExt, "init", "increment_loot_count",
 function(self, unit)
