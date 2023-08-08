@@ -12,7 +12,7 @@ end
 -- other cheat codes are, so I'm keeping them :) Plus, it's hilariously funny how easily
 -- the AI can get confused when you mess with some of these things.
 modday2_hacks = {
-	-- pager_reset = 1, -- Reset pager usage every time you bag someone.
+	-- pager_reset = 1, -- Reset pager usage every time you kill someone.
 	-- wireframes_enemies = 1, -- Show wireframes for all enemies
 	-- wireframes_civvies = 1, -- Show wireframes for all civilians
 	-- wireframes_loot = 1, -- Show wireframes for those who are carrying something (eg keycard)
