@@ -257,9 +257,12 @@ if modday2_hacks.more_stuff then
 	-- Or this changes the multiplier for the armor bonus from Iron Man - normally 30% bonus (1.3).
 	-- Note that this does NOT affect the menu, only in-game.
 	tweak_data.upgrades.values.player.armor_multiplier[1] = 1.5
-	-- Limits can also be adjusted.
+	-- Limits can also be adjusted. Note that these may affect cheater detection;
+	-- by raising these, we SHOULD permit other players to use more without banning.
 	tweak_data.equipments.specials.cable_tie.max_quantity = 50
 	tweak_data.equipments.specials.cable_tie.quantity = 40
+	tweak_data.equipments.max_amount.bodybags_bag = 8
+	tweak_data.equipments.max_amount.ecm_jammer = 8
 end
 
 -- Glasses off, everyone. You can't see a thing.
