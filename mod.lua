@@ -444,52 +444,56 @@ end)
 
 -- Is there a better way to do this?
 -- sed -n <lib/units/interactions/interactionext.lua '/class(/s/\(.*\) = .*class(\(.*\)).*\r*/\1.modday2_clsname = "\1 (\2)"/p'
-BaseInteractionExt.modday2_clsname = "BaseInteractionExt"
-UseInteractionExt.modday2_clsname = "UseInteractionExt"
-MultipleChoiceInteractionExt.modday2_clsname = "MultipleChoiceInteractionExt"
-TripMineInteractionExt.modday2_clsname = "TripMineInteractionExt"
-ECMJammerInteractionExt.modday2_clsname = "ECMJammerInteractionExt"
-ReviveInteractionExt.modday2_clsname = "ReviveInteractionExt"
-GageAssignmentInteractionExt.modday2_clsname = "GageAssignmentInteractionExt"
-AmmoBagInteractionExt.modday2_clsname = "AmmoBagInteractionExt"
-SentryGunInteractionExt.modday2_clsname = "SentryGunInteractionExt"
-SentryGunFireModeInteractionExt.modday2_clsname = "SentryGunFireModeInteractionExt"
-GrenadeCrateInteractionExt.modday2_clsname = "GrenadeCrateInteractionExt"
-BodyBagsBagInteractionExt.modday2_clsname = "BodyBagsBagInteractionExt"
-DoctorBagBaseInteractionExt.modday2_clsname = "DoctorBagBaseInteractionExt"
-C4BagInteractionExt.modday2_clsname = "C4BagInteractionExt"
-MultipleEquipmentBagInteractionExt.modday2_clsname = "MultipleEquipmentBagInteractionExt"
-VeilInteractionExt.modday2_clsname = "VeilInteractionExt"
-VeilTakeInteractionExt.modday2_clsname = "VeilTakeInteractionExt"
-SmallLootInteractionExt.modday2_clsname = "SmallLootInteractionExt"
-MoneyWrapInteractionExt.modday2_clsname = "MoneyWrapInteractionExt"
-DiamondInteractionExt.modday2_clsname = "DiamondInteractionExt"
-SecurityCameraInteractionExt.modday2_clsname = "SecurityCameraInteractionExt"
-ZipLineInteractionExt.modday2_clsname = "ZipLineInteractionExt"
-IntimitateInteractionExt.modday2_clsname = "IntimitateInteractionExt"
-CarryInteractionExt.modday2_clsname = "CarryInteractionExt"
-LootBankInteractionExt.modday2_clsname = "LootBankInteractionExt"
-EventIDInteractionExt.modday2_clsname = "EventIDInteractionExt"
-MissionDoorDeviceInteractionExt.modday2_clsname = "MissionDoorDeviceInteractionExt"
-SpecialEquipmentInteractionExt.modday2_clsname = "SpecialEquipmentInteractionExt"
-SpecialEquipmentGiveAndTakeInteractionExt.modday2_clsname = "SpecialEquipmentGiveAndTakeInteractionExt"
-AccessCameraInteractionExt.modday2_clsname = "AccessCameraInteractionExt"
-MissionElementInteractionExt.modday2_clsname = "MissionElementInteractionExt"
-DrivingInteractionExt.modday2_clsname = "DrivingInteractionExt"
-CivilianHeisterInteractionExt.modday2_clsname = "CivilianHeisterInteractionExt"
-SafehouseNPCInteractionExt.modday2_clsname = "SafehouseNPCInteractionExt"
-ButlerInteractionExt.modday2_clsname = "ButlerInteractionExt"
-AccessFBIFilesInteractionExt.modday2_clsname = "AccessFBIFilesInteractionExt"
-AccessPD2StashInteractionExt.modday2_clsname = "AccessPD2StashInteractionExt"
-AccessBankInvadersInteractionExt.modday2_clsname = "AccessBankInvadersInteractionExt"
-AccessSideJobsInteractionExt.modday2_clsname = "AccessSideJobsInteractionExt"
-AccessWeaponMenuInteractionExt.modday2_clsname = "AccessWeaponMenuInteractionExt"
-AccessCrimeNetInteractionExt.modday2_clsname = "AccessCrimeNetInteractionExt"
-PlayerTurretInteractionExt.modday2_clsname = "PlayerTurretInteractionExt"
-CustomUnitInteractionExt.modday2_clsname = "CustomUnitInteractionExt"
+BaseInteractionExt.modday2_clsname = nil
+UseInteractionExt.modday2_clsname = "Use" -- If it turns out this one is uninteresting, all the nil entries can be dropped
+MultipleChoiceInteractionExt.modday2_clsname = nil
+TripMineInteractionExt.modday2_clsname = nil
+ECMJammerInteractionExt.modday2_clsname = nil
+ReviveInteractionExt.modday2_clsname = nil
+GageAssignmentInteractionExt.modday2_clsname = "Gage"
+AmmoBagInteractionExt.modday2_clsname = nil
+SentryGunInteractionExt.modday2_clsname = nil
+SentryGunFireModeInteractionExt.modday2_clsname = nil
+GrenadeCrateInteractionExt.modday2_clsname = nil
+BodyBagsBagInteractionExt.modday2_clsname = nil
+DoctorBagBaseInteractionExt.modday2_clsname = nil
+C4BagInteractionExt.modday2_clsname = nil
+MultipleEquipmentBagInteractionExt.modday2_clsname = nil
+VeilInteractionExt.modday2_clsname = nil
+VeilTakeInteractionExt.modday2_clsname = nil
+SmallLootInteractionExt.modday2_clsname = "Small"
+MoneyWrapInteractionExt.modday2_clsname = nil
+DiamondInteractionExt.modday2_clsname = nil
+SecurityCameraInteractionExt.modday2_clsname = "Cam"
+ZipLineInteractionExt.modday2_clsname = nil
+IntimitateInteractionExt.modday2_clsname = nil
+CarryInteractionExt.modday2_clsname = "Carry"
+LootBankInteractionExt.modday2_clsname = nil
+EventIDInteractionExt.modday2_clsname = nil
+MissionDoorDeviceInteractionExt.modday2_clsname = nil
+SpecialEquipmentInteractionExt.modday2_clsname = nil
+SpecialEquipmentGiveAndTakeInteractionExt.modday2_clsname = nil
+AccessCameraInteractionExt.modday2_clsname = nil
+MissionElementInteractionExt.modday2_clsname = nil
+DrivingInteractionExt.modday2_clsname = nil
+CivilianHeisterInteractionExt.modday2_clsname = nil
+SafehouseNPCInteractionExt.modday2_clsname = nil
+ButlerInteractionExt.modday2_clsname = nil
+AccessFBIFilesInteractionExt.modday2_clsname = nil
+AccessPD2StashInteractionExt.modday2_clsname = nil
+AccessBankInvadersInteractionExt.modday2_clsname = nil
+AccessSideJobsInteractionExt.modday2_clsname = nil
+AccessWeaponMenuInteractionExt.modday2_clsname = nil
+AccessCrimeNetInteractionExt.modday2_clsname = nil
+PlayerTurretInteractionExt.modday2_clsname = nil
+CustomUnitInteractionExt.modday2_clsname = nil
 
-Hooks:PostHook(BaseInteractionExt, "interact", "show_interactables",
-function(self, unit)
+-- Identify the thing you just interacted with:
+-- Hooks:PostHook(BaseInteractionExt, "interact", "show_interactables",
+-- function(self, unit) say("That's " .. (self.modday2_clsname or "nil")) end)
+
+Hooks:PostHook(HUDStatsScreen, "recreate_left", "show_interactables",
+function(self)
 	local types = {}
 	for _, unit in pairs(managers.interaction._interactive_units) do
 		unit = unit:interaction()
@@ -497,8 +501,14 @@ function(self, unit)
 			types[unit.modday2_clsname] = (types[unit.modday2_clsname] or 0) + 1
 		end
 	end
-	-- List all active types and how many there are:
-	-- for t, n in pairs(types) do say(n .. " of " .. t) end
-	-- Identify the one you just interacted with:
-	-- say("That's " .. (self.modday2_clsname or "nil"))
+	local msg = "Loot:"
+	for t, n in pairs(types) do
+		msg = msg .. " " .. t .. "/" .. n
+	end
+	local placer = UiPlacer:new(16, 400, 8, 4)
+	placer:add_row(self._left:fine_text({
+		text = msg,
+		font = tweak_data.hud.medium_font,
+		font_size = tweak_data.hud.active_objective_title_font_size,
+	}))
 end)
