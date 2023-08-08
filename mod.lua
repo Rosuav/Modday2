@@ -429,41 +429,66 @@ end)
 -- Attempt to count loot remaining on the map
 -- TODO: Loot inside openables does not exist until they are opened. So to usefully
 -- show remaining loot, it'll need to count openables, which I haven't yet figured out.
--- Plus, there often seem to be some interactions that I just can't find. Does that mean
--- there's loot on the map that I haven't located, or phantom entries that don't really
--- exist? Need to figure this out; it might be that they're inactive (see set_active()),
--- or it might be that I can point to them on the map.
+-- Openables appear to  be just UseInteractionExt.
 -- TODO: Show this in the HUD rather than as a countdown.
-small_count, carry_count = 0, 0
-Hooks:PostHook(SmallLootInteractionExt, "init", "increment_loot_count",
+
+-- Is there a better way to do this?
+-- sed -n <lib/units/interactions/interactionext.lua '/class(/s/\(.*\) = .*class(\(.*\)).*\r*/\1.modday2_clsname = "\1 (\2)"/p'
+BaseInteractionExt.modday2_clsname = "BaseInteractionExt"
+UseInteractionExt.modday2_clsname = "UseInteractionExt"
+MultipleChoiceInteractionExt.modday2_clsname = "MultipleChoiceInteractionExt"
+TripMineInteractionExt.modday2_clsname = "TripMineInteractionExt"
+ECMJammerInteractionExt.modday2_clsname = "ECMJammerInteractionExt"
+ReviveInteractionExt.modday2_clsname = "ReviveInteractionExt"
+GageAssignmentInteractionExt.modday2_clsname = "GageAssignmentInteractionExt"
+AmmoBagInteractionExt.modday2_clsname = "AmmoBagInteractionExt"
+SentryGunInteractionExt.modday2_clsname = "SentryGunInteractionExt"
+SentryGunFireModeInteractionExt.modday2_clsname = "SentryGunFireModeInteractionExt"
+GrenadeCrateInteractionExt.modday2_clsname = "GrenadeCrateInteractionExt"
+BodyBagsBagInteractionExt.modday2_clsname = "BodyBagsBagInteractionExt"
+DoctorBagBaseInteractionExt.modday2_clsname = "DoctorBagBaseInteractionExt"
+C4BagInteractionExt.modday2_clsname = "C4BagInteractionExt"
+MultipleEquipmentBagInteractionExt.modday2_clsname = "MultipleEquipmentBagInteractionExt"
+VeilInteractionExt.modday2_clsname = "VeilInteractionExt"
+VeilTakeInteractionExt.modday2_clsname = "VeilTakeInteractionExt"
+SmallLootInteractionExt.modday2_clsname = "SmallLootInteractionExt"
+MoneyWrapInteractionExt.modday2_clsname = "MoneyWrapInteractionExt"
+DiamondInteractionExt.modday2_clsname = "DiamondInteractionExt"
+SecurityCameraInteractionExt.modday2_clsname = "SecurityCameraInteractionExt"
+ZipLineInteractionExt.modday2_clsname = "ZipLineInteractionExt"
+IntimitateInteractionExt.modday2_clsname = "IntimitateInteractionExt"
+CarryInteractionExt.modday2_clsname = "CarryInteractionExt"
+LootBankInteractionExt.modday2_clsname = "LootBankInteractionExt"
+EventIDInteractionExt.modday2_clsname = "EventIDInteractionExt"
+MissionDoorDeviceInteractionExt.modday2_clsname = "MissionDoorDeviceInteractionExt"
+SpecialEquipmentInteractionExt.modday2_clsname = "SpecialEquipmentInteractionExt"
+SpecialEquipmentGiveAndTakeInteractionExt.modday2_clsname = "SpecialEquipmentGiveAndTakeInteractionExt"
+AccessCameraInteractionExt.modday2_clsname = "AccessCameraInteractionExt"
+MissionElementInteractionExt.modday2_clsname = "MissionElementInteractionExt"
+DrivingInteractionExt.modday2_clsname = "DrivingInteractionExt"
+CivilianHeisterInteractionExt.modday2_clsname = "CivilianHeisterInteractionExt"
+SafehouseNPCInteractionExt.modday2_clsname = "SafehouseNPCInteractionExt"
+ButlerInteractionExt.modday2_clsname = "ButlerInteractionExt"
+AccessFBIFilesInteractionExt.modday2_clsname = "AccessFBIFilesInteractionExt"
+AccessPD2StashInteractionExt.modday2_clsname = "AccessPD2StashInteractionExt"
+AccessBankInvadersInteractionExt.modday2_clsname = "AccessBankInvadersInteractionExt"
+AccessSideJobsInteractionExt.modday2_clsname = "AccessSideJobsInteractionExt"
+AccessWeaponMenuInteractionExt.modday2_clsname = "AccessWeaponMenuInteractionExt"
+AccessCrimeNetInteractionExt.modday2_clsname = "AccessCrimeNetInteractionExt"
+PlayerTurretInteractionExt.modday2_clsname = "PlayerTurretInteractionExt"
+CustomUnitInteractionExt.modday2_clsname = "CustomUnitInteractionExt"
+
+Hooks:PostHook(BaseInteractionExt, "interact", "show_interactables",
 function(self, unit)
-	small_count = small_count + 1
-	say("Loot: " .. small_count .. "+ sm, " .. carry_count .. " carry")
-end)
-Hooks:PostHook(SmallLootInteractionExt, "destroy", "decrement_loot_count",
-function(self, unit)
-	small_count = small_count - 1
-	say("Loot: " .. small_count .. "- sm, " .. carry_count .. " carry")
-end)
--- Never seen any of these.
---~ money_wrap_count = 0
---~ Hooks:PostHook(MoneyWrapInteractionExt, "init", "increment_loot_count",
---~ function(self, unit)
---~ 	money_wrap_count = money_wrap_count + 1
---~ 	say("Money wrap: " .. money_wrap_count .. "+")
---~ end)
---~ Hooks:PostHook(MoneyWrapInteractionExt, "destroy", "decrement_loot_count",
---~ function(self, unit)
---~ 	money_wrap_count = money_wrap_count - 1
---~ 	say("Money wrap: " .. money_wrap_count .. "-")
---~ end)
-Hooks:PostHook(CarryInteractionExt, "init", "increment_loot_count",
-function(self, unit)
-	carry_count = carry_count + 1
-	say("Loot: " .. small_count .. " sm, " .. carry_count .. "+ carry")
-end)
-Hooks:PostHook(CarryInteractionExt, "destroy", "decrement_loot_count",
-function(self, unit)
-	carry_count = carry_count - 1
-	say("Loot: " .. small_count .. " sm, " .. carry_count .. "- carry")
+	local types = {}
+	for _, unit in pairs(managers.interaction._interactive_units) do
+		unit = unit:interaction()
+		if unit.modday2_clsname and unit:active() then
+			types[unit.modday2_clsname] = (types[unit.modday2_clsname] or 0) + 1
+		end
+	end
+	-- List all active types and how many there are:
+	-- for t, n in pairs(types) do say(n .. " of " .. t) end
+	-- Identify the one you just interacted with:
+	-- say("That's " .. (self.modday2_clsname or "nil"))
 end)
