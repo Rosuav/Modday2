@@ -30,7 +30,11 @@ Hooks:PostHook(PlayerManager, 'on_used_body_bag', 'alert_out_of_bags',
 function(self, data)
 	local pagers_used = managers.groupai:state():get_nr_successful_alarm_pager_bluffs()
 	if pagers_used < 4 and self._local_player_body_bags < 1 then
-		say("That was your last body bag! Grab " .. (4 - pagers_used) .. " more!")
+		if modday2_hacks.pager_reset then
+			say("That was your last body bag!")
+		else
+			say("That was your last body bag! Grab " .. (4 - pagers_used) .. " more!")
+		end
 	end
 end)
 
