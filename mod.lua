@@ -108,40 +108,6 @@ function check_compass(self, input, mode)
 		if self._cam_fwd_flat.y < 0 then
 			label = string.gsub(label, "N", "S")
 		end
-		-- Testing, needs a proper place (maybe this? probably not).
-		-- Query how many enemies there are on the map.
-		local enemies, civilians = 0, 0
-		for _, data in pairs(managers.enemy:all_enemies()) do
-			if modday2_hacks.wireframes_loot and data.unit:character_damage() and data.unit:character_damage()._pickup and data.unit:character_damage()._pickup ~= "ammo" then
-				data.unit:contour():add("tmp_invulnerable", true, 10)
-				managers.network:session():send_to_peers_synched("spot_enemy", data.unit)
-			end
-			if modday2_hacks.wireframes_enemies then
-				data.unit:contour():add("mark_enemy_damage_bonus", true, 2)
-				managers.network:session():send_to_peers_synched("spot_enemy", data.unit)
-			end
-			if modday2_hacks.death_grange then
-				-- Take out only those who don't have pagers?
-				-- if data.unit:character_damage() and not data.unit:unit_data().has_alarm_pager then
-				-- Or take out everyone, and suppress their pagers?
-				if data.unit:character_damage() then
-					data.unit:unit_data().has_alarm_pager = false
-					-- Take 'em out.
-					data.unit:character_damage():damage_mission({
-						damage = data.unit:character_damage()._HEALTH_INIT + 1
-					})
-				end
-			end
-			enemies = enemies + 1
-		end
-		for _, data in pairs(managers.enemy:all_civilians()) do
-			if modday2_hacks.wireframes_civvies then
-				data.unit:contour():add("mark_enemy", true, 1)
-				managers.network:session():send_to_peers_synched("spot_enemy", data.unit)
-			end
-			civilians = civilians + 1
-		end
-		label = label .. " (enem " .. enemies .. ", civ " .. civilians .. ")"
 		say("You are " .. mode .. " and facing: " .. label)
 		-- managers.experience:give_experience(1000, true)
 		if modday2_hacks.conquistador then
@@ -541,4 +507,45 @@ function(self)
 			font_size = tweak_data.hud.active_objective_title_font_size,
 		}))
 	end
+
+	-- Give a quick count of how many people are on the map.
+	-- Also, if the appropriate hacks are enabled, show wireframes. This is GREAT for a
+	-- cheats-mode walkaround of a map, to see what's where or to easily enumerate all
+	-- possible locations for things.
+	local enemies, civilians = 0, 0
+	for _, data in pairs(managers.enemy:all_enemies()) do
+		if modday2_hacks.wireframes_loot and data.unit:character_damage() and data.unit:character_damage()._pickup and data.unit:character_damage()._pickup ~= "ammo" then
+			data.unit:contour():add("tmp_invulnerable", true, 10)
+			managers.network:session():send_to_peers_synched("spot_enemy", data.unit)
+		end
+		if modday2_hacks.wireframes_enemies then
+			data.unit:contour():add("mark_enemy_damage_bonus", true, 2)
+			managers.network:session():send_to_peers_synched("spot_enemy", data.unit)
+		end
+		if modday2_hacks.death_grange then
+			-- Take out only those who don't have pagers?
+			-- if data.unit:character_damage() and not data.unit:unit_data().has_alarm_pager then
+			-- Or take out everyone, and suppress their pagers?
+			if data.unit:character_damage() then
+				data.unit:unit_data().has_alarm_pager = false
+				-- Take 'em out.
+				data.unit:character_damage():damage_mission({
+					damage = data.unit:character_damage()._HEALTH_INIT + 1
+				})
+			end
+		end
+		enemies = enemies + 1
+	end
+	for _, data in pairs(managers.enemy:all_civilians()) do
+		if modday2_hacks.wireframes_civvies then
+			data.unit:contour():add("mark_enemy", true, 1)
+			managers.network:session():send_to_peers_synched("spot_enemy", data.unit)
+		end
+		civilians = civilians + 1
+	end
+	placer:add_row(self._left:fine_text({
+		text = "Enemies: " .. enemies .. "  Civilians: " .. civilians,
+		font = tweak_data.hud.medium_font,
+		font_size = tweak_data.hud.active_objective_title_font_size,
+	}))
 end)
