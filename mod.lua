@@ -33,9 +33,9 @@ function(self, data)
 	local pagers_used = managers.groupai:state():get_nr_successful_alarm_pager_bluffs()
 	if pagers_used < 4 and self._local_player_body_bags < 1 then
 		if pagers_used == 0 then
-			say("That was your last body bag!")
+			say("That's your last body bag!")
 		else
-			say("That was your last body bag! Grab " .. (4 - pagers_used) .. " more!")
+			say("That's your last body bag! Grab " .. (4 - pagers_used) .. " more!")
 		end
 	end
 end)
@@ -517,4 +517,28 @@ function(self)
 		font = tweak_data.hud.medium_font,
 		font_size = tweak_data.hud.active_objective_title_font_size,
 	}))
+	if managers.player._local_player_body_bags < 1 then
+		-- Put a cautionary note that you're out of bags
+		-- Three possibilities:
+		-- 1) If all pagers used, show "No body bags" in white - mere notification
+		-- 2) If no pagers used, "No body bags!" in red - grab some!
+		-- 3) If 1-3 pagers used, "No body bags - grab N!" in red, same reason
+		local pagers_used = managers.groupai:state():get_nr_successful_alarm_pager_bluffs()
+		local msg = "No body bags"
+		local color = Color.white
+		if pagers_used == 0 then
+			color = Color.yellow
+		elseif pagers_used < 4 then
+			color = Color.yellow
+			msg = "No body bags - grab " .. (4 - pagers_used) .. "!"
+		else
+			msg = "No body bags!"
+		end
+		placer:add_row(self._left:fine_text({
+			text = msg,
+			color = color,
+			font = tweak_data.hud.medium_font,
+			font_size = tweak_data.hud.active_objective_title_font_size,
+		}))
+	end
 end)
