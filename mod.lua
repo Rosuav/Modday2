@@ -11,12 +11,14 @@ end
 -- in order to tinker with other features, but they're also useful in the same way that
 -- other cheat codes are, so I'm keeping them :) Plus, it's hilariously funny how easily
 -- the AI can get confused when you mess with some of these things.
+-- CAUTION: Use of any hacks in multiplayer may cause you to be autokicked as a cheater
+-- if this mod and its hack settings are not synchronized across players.
 modday2_hacks = {
 	-- pager_reset = 1, -- Reset pager usage every time you answer a pager.
 	-- wireframes_enemies = 1, -- Show wireframes for all enemies
 	-- wireframes_civvies = 1, -- Show wireframes for all civilians
 	-- wireframes_loot = 1, -- Show wireframes for those who are carrying something (eg keycard)
-	-- more_stuff = 1, -- Give more stuff. See below for details on exactly what it gives. CAUTION: May cause you to be autokicked as a cheater.
+	-- more_stuff = 1, -- Give more stuff. See below for details on exactly what it gives.
 	-- glasses_off = 1, -- Transport the Payday Gang to a myopia utopia!
 	-- smekalka = 1, -- Teach Russian ingenuity to the dozers...
 	-- insurance = 1, -- Buy murder insurance before you go.
@@ -30,7 +32,7 @@ Hooks:PostHook(PlayerManager, 'on_used_body_bag', 'alert_out_of_bags',
 function(self, data)
 	local pagers_used = managers.groupai:state():get_nr_successful_alarm_pager_bluffs()
 	if pagers_used < 4 and self._local_player_body_bags < 1 then
-		if modday2_hacks.pager_reset then
+		if pagers_used == 0 then
 			say("That was your last body bag!")
 		else
 			say("That was your last body bag! Grab " .. (4 - pagers_used) .. " more!")
