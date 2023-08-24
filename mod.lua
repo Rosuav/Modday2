@@ -502,6 +502,10 @@ function(self)
 		enemies = enemies + 1
 	end
 	for _, data in pairs(managers.enemy:all_civilians()) do
+		if modday2_hacks.wireframes_loot and data.unit:character_damage() and data.unit:character_damage()._pickup and data.unit:character_damage()._pickup ~= "ammo" then
+			data.unit:contour():add("tmp_invulnerable", true, 10)
+			managers.network:session():send_to_peers_synched("spot_enemy", data.unit)
+		end
 		if modday2_hacks.wireframes_civvies then
 			data.unit:contour():add("mark_enemy", true, 1)
 			managers.network:session():send_to_peers_synched("spot_enemy", data.unit)
