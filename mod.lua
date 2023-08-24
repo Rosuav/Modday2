@@ -197,7 +197,13 @@ if modday2_hacks.more_stuff then
 	-- a total of 2) instead add 7 (for a total of 8 if you have that skill, or the normal 1 if not).
 	-- For upgrades that can happen more than once, there'll be an inner table with multiple values.
 	tweak_data.upgrades.values.bodybags_bag.quantity[1] = 7
+	tweak_data.equipments.max_amount.bodybags_bag = 8
 	tweak_data.upgrades.values.ecm_jammer.quantity[1] = 7
+	tweak_data.equipments.max_amount.ecm_jammer = 8
+	tweak_data.upgrades.values.doctor_bag.quantity[1] = 7
+	tweak_data.equipments.max_amount.doctor_bag = 8
+	tweak_data.upgrades.values.ammo_bag.quantity[1] = 7
+	tweak_data.equipments.max_amount.ammo_bag = 8
 	-- Or this changes the multiplier for the armor bonus from Iron Man - normally 30% bonus (1.3).
 	-- Note that this does NOT affect the menu, only in-game.
 	tweak_data.upgrades.values.player.armor_multiplier[1] = 1.5
@@ -205,8 +211,6 @@ if modday2_hacks.more_stuff then
 	-- by raising these, we SHOULD permit other players to use more without banning.
 	tweak_data.equipments.specials.cable_tie.max_quantity = 50
 	tweak_data.equipments.specials.cable_tie.quantity = 40
-	tweak_data.equipments.max_amount.bodybags_bag = 8
-	tweak_data.equipments.max_amount.ecm_jammer = 8
 end
 
 -- Glasses off, everyone. You can't see a thing.
