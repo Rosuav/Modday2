@@ -192,6 +192,17 @@ end)
 tweak_data.equipments.specials.cable_tie.max_quantity = 20
 
 -- To adjust the effects of different skill/perk upgrades, do this (here at top level):
+
+-- IMO the drill autorepair skills are basically useless. Let's make it so they actually
+-- guarantee the restart, and see whether that makes those skills worth buying. Is there
+-- any value between 30% and 100% that would be low enough to be fair, but not so low as
+-- to reintroduce the same frustration? I suspect that, for example, a 99% autorestart
+-- chance would be pure frustration in the 1% of times that it fails.
+-- Note that even at 100% chance to autorestart, it's still notably faster to interact,
+-- so this is really only a benefit for unattended drills.
+tweak_data.upgrades.values.player.drill_autorepair_1[1] = 0.25
+tweak_data.upgrades.values.player.drill_autorepair_2[1] = 0.75
+
 if modday2_hacks.more_stuff then
 	-- This particular one makes the body bag upgrade (that normally adds 1 to your max body bags, for
 	-- a total of 2) instead add 7 (for a total of 8 if you have that skill, or the normal 1 if not).
