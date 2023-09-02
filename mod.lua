@@ -492,7 +492,7 @@ function(self)
 	-- Also, if the appropriate hacks are enabled, show wireframes. This is GREAT for a
 	-- cheats-mode walkaround of a map, to see what's where or to easily enumerate all
 	-- possible locations for things.
-	local enemies, civilians = 0, 0
+	local enemies, pagers, civilians = 0, 0, 0
 	for _, data in pairs(managers.enemy:all_enemies()) do
 		if modday2_hacks.wireframes_loot and data.unit:character_damage() and data.unit:character_damage()._pickup and data.unit:character_damage()._pickup ~= "ammo" then
 			data.unit:contour():add("tmp_invulnerable", true, 10)
@@ -514,6 +514,9 @@ function(self)
 				})
 			end
 		end
+		if data.unit:unit_data().has_alarm_pager then
+			pagers = pagers + 1
+		end
 		enemies = enemies + 1
 	end
 	for _, data in pairs(managers.enemy:all_civilians()) do
@@ -528,7 +531,7 @@ function(self)
 		civilians = civilians + 1
 	end
 	placer:add_row(self._left:fine_text({
-		text = "Enemies: " .. enemies .. "  Civilians: " .. civilians,
+		text = "Enemies: " .. enemies .. " (" .. pagers .. " pg)  Civilians: " .. civilians,
 		font = tweak_data.hud.medium_font,
 		font_size = tweak_data.hud.active_objective_title_font_size,
 	}))
