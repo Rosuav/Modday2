@@ -187,6 +187,11 @@ function(self, id, unit)
 		if bots == 3 then self:add_cable_ties(6) end
 		if bots == 2 then self:add_cable_ties(2) end
 		if bots == 1 then self:add_cable_ties(1) end
+
+		if modday2_hacks.more_stuff then
+			-- Grant some modifiers as if you got them from skills/perks
+			managers.upgrades:aquire("extra_ammo_multiplier1", false, "bonus_ammo")
+		end
 	end)
 end)
 tweak_data.equipments.specials.cable_tie.max_quantity = 20
@@ -218,6 +223,7 @@ if modday2_hacks.more_stuff then
 	-- Or this changes the multiplier for the armor bonus from Iron Man - normally 30% bonus (1.3).
 	-- Note that this does NOT affect the menu, only in-game.
 	tweak_data.upgrades.values.player.armor_multiplier[1] = 1.5
+	tweak_data.upgrades.values.player.extra_ammo_multiplier[1] = 10
 	-- Limits can also be adjusted. Note that these may affect cheater detection;
 	-- by raising these, we SHOULD permit other players to use more without banning.
 	tweak_data.equipments.specials.cable_tie.max_quantity = 50
