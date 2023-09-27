@@ -224,6 +224,9 @@ if modday2_hacks.more_stuff then
 	-- Note that this does NOT affect the menu, only in-game.
 	tweak_data.upgrades.values.player.armor_multiplier[1] = 1.5
 	tweak_data.upgrades.values.player.extra_ammo_multiplier[1] = 10
+	-- Initial body bags are "corpse dispose", where the deployable asset is the "body bag bag".
+	tweak_data.upgrades.values.player.corpse_dispose_amount[1] = 10
+	tweak_data.upgrades.values.player.corpse_dispose_amount[2] = 20
 	-- Limits can also be adjusted. Note that these may affect cheater detection;
 	-- by raising these, we SHOULD permit other players to use more without banning.
 	tweak_data.equipments.specials.cable_tie.max_quantity = 50
