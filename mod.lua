@@ -14,17 +14,20 @@ end
 -- CAUTION: Use of any hacks in multiplayer may cause you to be autokicked as a cheater
 -- if this mod and its hack settings are not synchronized across players.
 modday2_hacks = {
-	-- pager_reset = 1, -- Reset pager usage every time you answer a pager.
+	-- Simple hacks/cheats:
 	-- wireframes_enemies = 1, -- Show wireframes for all enemies
 	-- wireframes_civvies = 1, -- Show wireframes for all civilians
 	-- wireframes_loot = 1, -- Show wireframes for those who are carrying something (eg keycard)
 	-- more_stuff = 1, -- Give more stuff. See below for details on exactly what it gives.
 	-- glasses_off = 1, -- Transport the Payday Gang to a myopia utopia!
 	-- smekalka = 1, -- Teach Russian ingenuity to the dozers...
+
+	-- Alternate game modes:
 	-- insurance = 1, -- Buy murder insurance before you go.
 	-- dark_cameras = 1, -- Cameras go dark.
 	-- sep_field = 1, -- Someone Else's Problem field makes you invisible to all civilians (as long as you aren't a threat).
-	-- death_grange = 1, -- You're asking for trouble, you are!
+	-- death_grange = 1, -- You're asking for trouble, you are! [Instakill enemies on Tab]
+	-- slaughter_hill = 1, -- No, I'm asking for a ticket! [Infinite pagers and ample body bags]
 }
 
 Hooks:PostHook(PlayerManager, 'on_used_body_bag', 'alert_out_of_bags',
@@ -39,7 +42,7 @@ function(self, data)
 	end
 end)
 
-if modday2_hacks.pager_reset then
+if modday2_hacks.slaughter_hill then
 	Hooks:PostHook(GroupAIStateBase, 'on_successful_alarm_pager_bluff', 'pager_reset',
 	function(self)
 		self._nr_successful_alarm_pager_bluffs = 0
@@ -224,13 +227,16 @@ if modday2_hacks.more_stuff then
 	-- Note that this does NOT affect the menu, only in-game.
 	tweak_data.upgrades.values.player.armor_multiplier[1] = 1.5
 	tweak_data.upgrades.values.player.extra_ammo_multiplier[1] = 10
-	-- Initial body bags are "corpse dispose", where the deployable asset is the "body bag bag".
-	tweak_data.upgrades.values.player.corpse_dispose_amount[1] = 10
-	tweak_data.upgrades.values.player.corpse_dispose_amount[2] = 20
 	-- Limits can also be adjusted. Note that these may affect cheater detection;
 	-- by raising these, we SHOULD permit other players to use more without banning.
 	tweak_data.equipments.specials.cable_tie.max_quantity = 50
 	tweak_data.equipments.specials.cable_tie.quantity = 40
+end
+
+if modday2_hacks.slaughter_hill then
+	-- Initial body bags are "corpse dispose", where the deployable asset is the "body bag bag".
+	tweak_data.upgrades.values.player.corpse_dispose_amount[1] = 20
+	tweak_data.upgrades.values.player.corpse_dispose_amount[2] = 99
 end
 
 -- Glasses off, everyone. You can't see a thing.
