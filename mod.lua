@@ -21,14 +21,21 @@ modday2_hacks = {
 	-- more_stuff = 1, -- Give more stuff. See below for details on exactly what it gives.
 	-- glasses_off = 1, -- Transport the Payday Gang to a myopia utopia!
 	-- smekalka = 1, -- Teach Russian ingenuity to the dozers...
+	-- dark_cameras = 1, -- Cameras go dark.
 
 	-- Alternate game modes:
 	-- insurance = 1, -- Buy murder insurance before you go.
-	-- dark_cameras = 1, -- Cameras go dark.
 	-- sep_field = 1, -- Someone Else's Problem field makes you invisible to all civilians (as long as you aren't a threat).
 	-- death_grange = 1, -- You're asking for trouble, you are! [Instakill enemies on Tab]
 	-- slaughter_hill = 1, -- No, I'm asking for a ticket! [Infinite pagers and ample body bags]
+	-- no_mission_control = 1, -- GenSec is ours now. Press Tab to see all enemies' wireframes; cameras and pagers are disabled.
 }
+
+if modday2_hacks.no_mission_control then
+	-- Tie in with these to save some effort
+	modday2_hacks.dark_cameras = 1
+	modday2_hacks.wireframes_enemies = 1
+end
 
 Hooks:PostHook(PlayerManager, 'on_used_body_bag', 'alert_out_of_bags',
 function(self, data)
@@ -237,6 +244,15 @@ if modday2_hacks.slaughter_hill then
 	-- Initial body bags are "corpse dispose", where the deployable asset is the "body bag bag".
 	tweak_data.upgrades.values.player.corpse_dispose_amount[1] = 20
 	tweak_data.upgrades.values.player.corpse_dispose_amount[2] = 99
+end
+
+if modday2_hacks.no_mission_control then
+	-- Remove all pagers from everyone.
+	for _, chartype in pairs(tweak_data.character) do
+		if type(chartype) == "table" and chartype.has_alarm_pager then
+			chartype.has_alarm_pager = false
+		end
+	end
 end
 
 -- Glasses off, everyone. You can't see a thing.
