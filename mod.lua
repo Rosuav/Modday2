@@ -250,6 +250,7 @@ if modday2_hacks.no_mission_control then
 	-- Tie in with these to save some effort
 	modday2_hacks.dark_cameras = 1
 	modday2_hacks.wireframes_enemies = 1
+	-- TODO: Figure out how to prevent the call-in on missions where removing X cops triggers another
 end
 
 -- Glasses off, everyone. You can't see a thing.
