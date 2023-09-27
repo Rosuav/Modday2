@@ -31,12 +31,6 @@ modday2_hacks = {
 	-- no_mission_control = 1, -- GenSec is ours now. Press Tab to see all enemies' wireframes; cameras and pagers are disabled.
 }
 
-if modday2_hacks.no_mission_control then
-	-- Tie in with these to save some effort
-	modday2_hacks.dark_cameras = 1
-	modday2_hacks.wireframes_enemies = 1
-end
-
 Hooks:PostHook(PlayerManager, 'on_used_body_bag', 'alert_out_of_bags',
 function(self, data)
 	local pagers_used = managers.groupai:state():get_nr_successful_alarm_pager_bluffs()
@@ -253,6 +247,9 @@ if modday2_hacks.no_mission_control then
 			chartype.has_alarm_pager = false
 		end
 	end
+	-- Tie in with these to save some effort
+	modday2_hacks.dark_cameras = 1
+	modday2_hacks.wireframes_enemies = 1
 end
 
 -- Glasses off, everyone. You can't see a thing.
