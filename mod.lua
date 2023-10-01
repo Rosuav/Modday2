@@ -298,11 +298,10 @@ function CopActionWalk:_get_current_max_walk_speed(move_dir)
 	if self._unit:brain().is_hostage and self._unit:brain():is_hostage() and self._unit.hostage_following then
 		-- TODO: Use self._unit.hostage_following to determine whether or not to boost speed
 		-- It ought to be player_unit() as seen elsewhere.
-		-- TODO: What speed? 1000 is a bit caffeinated but good for testing. Maybe 800? 750?
-		-- How fast do players normally move?
+		-- TODO: What speed? 1000 is rather caffeinated but good for testing. Maybe 600?
 		-- say("Hostage speed: " .. speed)
 		-- say("Hostage following: " .. self._unit.hostage_following)
-		return 1000
+		-- return 1000 -- disabled for now pending a skill check
 	end
 	return speed
 end
