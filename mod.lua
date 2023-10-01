@@ -292,6 +292,21 @@ if modday2_hacks.sep_field then
 	end
 end
 
+_orig_walk_speed = CopActionWalk._get_current_max_walk_speed
+function CopActionWalk:_get_current_max_walk_speed(move_dir)
+	local speed = _orig_walk_speed(self, move_dir)
+	if self._unit:brain().is_hostage and self._unit:brain():is_hostage() and self._unit.hostage_following then
+		-- TODO: Use self._unit.hostage_following to determine whether or not to boost speed
+		-- It ought to be player_unit() as seen elsewhere.
+		-- TODO: What speed? 1000 is a bit caffeinated but good for testing. Maybe 800? 750?
+		-- How fast do players normally move?
+		-- say("Hostage speed: " .. speed)
+		-- say("Hostage following: " .. self._unit.hostage_following)
+		return 1000
+	end
+	return speed
+end
+
 function heading_from_vector(vec)
 	return math.floor(mvector3.angle(vec, math.Y))
 end
