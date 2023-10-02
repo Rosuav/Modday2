@@ -22,6 +22,7 @@ modday2_hacks = {
 	-- glasses_off = 1, -- Transport the Payday Gang to a myopia utopia!
 	-- smekalka = 1, -- Teach Russian ingenuity to the dozers...
 	-- dark_cameras = 1, -- Cameras go dark.
+	-- hacky_hack_hostage_speed = 1, -- TESTING. Might end up becoming permanent, if it gets governed by a skill properly.
 
 	-- Alternate game modes:
 	-- insurance = 1, -- Buy murder insurance before you go.
@@ -292,18 +293,42 @@ if modday2_hacks.sep_field then
 	end
 end
 
-_orig_walk_speed = CopActionWalk._get_current_max_walk_speed
-function CopActionWalk:_get_current_max_walk_speed(move_dir)
-	local speed = _orig_walk_speed(self, move_dir)
-	if self._unit:brain().is_hostage and self._unit:brain():is_hostage() and self._unit.hostage_following then
-		-- TODO: Use self._unit.hostage_following to determine whether or not to boost speed
-		-- It ought to be player_unit() as seen elsewhere.
-		-- TODO: What speed? 1000 is rather caffeinated but good for testing. Maybe 600?
-		-- say("Hostage speed: " .. speed)
-		-- say("Hostage following: " .. self._unit.hostage_following)
-		-- return 1000 -- disabled for now pending a skill check
+if modday2_hacks.hacky_hack_hostage_speed then
+	_orig_walk_speed = CopActionWalk._get_current_max_walk_speed
+	function CopActionWalk:_get_current_max_walk_speed(move_dir)
+		local speed = _orig_walk_speed(self, move_dir)
+		if self._unit:brain().is_hostage and self._unit:brain():is_hostage() then
+			-- TODO: Use self._unit.hostage_following to determine whether or not to boost speed
+			-- It ought to be player_unit() as seen elsewhere.
+			-- TODO: What speed? 1000 is rather caffeinated but good for testing. Maybe 600?
+			-- say("Hostage speed: " .. speed)
+			local follower_data = managers.enemy:all_civilians()[self._unit:key()]
+			local player = follower_data.hostage_following
+			-- say("Player: " .. type(player) .. " or " .. type(managers.player:player_unit()))
+			-- say("Equal? " .. ((player == managers.player:player_unit()) and "yes" or "no"))
+			if player == managers.player:player_unit() then
+				if managers.player:has_team_category_upgrade("damage", "hostage_absorption") then
+					say("Is local player with FF aced!")
+				else
+					say("Is local player!")
+				end
+				return 1000
+			end
+			say("Is not local player.")
+			-- return 1000 -- disabled for now pending a skill check
+		end
+		return speed
 	end
-	return speed
+
+	Hooks:PostHook(GroupAIStateBase, "on_hostage_follow", "dump",
+	function(self, owner, follower, state)
+		say("on_hostage_follow: " .. type(self) .. " " .. type(owner) .. " " .. type(follower) .. " " .. (state and "true" or "false"))
+		if state then
+			say("key: " .. type(follower:key()))
+			local follower_data = managers.enemy:all_civilians()[follower:key()]
+			say("follower_data: " .. type(follower_data))
+		end
+	end)
 end
 
 function heading_from_vector(vec)
