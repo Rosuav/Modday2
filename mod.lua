@@ -225,6 +225,9 @@ if modday2_hacks.more_stuff then
 	tweak_data.equipments.max_amount.doctor_bag = 8
 	tweak_data.upgrades.values.ammo_bag.quantity[1] = 7
 	tweak_data.equipments.max_amount.ammo_bag = 8
+	tweak_data.upgrades.values.shape_charge.quantity[1] = 21
+	tweak_data.upgrades.values.shape_charge.quantity[2] = 31
+	tweak_data.equipments.max_amount.trip_mine = 40
 	-- Or this changes the multiplier for the armor bonus from Iron Man - normally 30% bonus (1.3).
 	-- Note that this does NOT affect the menu, only in-game.
 	tweak_data.upgrades.values.player.armor_multiplier[1] = 1.5
