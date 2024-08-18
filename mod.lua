@@ -201,6 +201,14 @@ function(self, id, unit)
 end)
 tweak_data.equipments.specials.cable_tie.max_quantity = 20
 
+-- Special case hack: Meltdown's crowbars. What I'd really like here isn't to make the
+-- "jam" interaction not consume the crowbar (which is what's done here and makes no
+-- sense, and stacks), but to add a preplanning asset to allow you to purchase one
+-- crowbar to start the mission with. You would still need to search if you want to
+-- cook the nukes faster, but you would have the option to start out by opening crates,
+-- or alternatively to open the vault with one crowbar instantly.
+-- tweak_data.interaction.gen_prop_container_a_vault_seq.equipment_consume = false
+
 -- To adjust the effects of different skill/perk upgrades, do this (here at top level):
 
 -- IMO the drill autorepair skills are basically useless. Let's make it so they actually
