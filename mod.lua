@@ -23,6 +23,7 @@ modday2_hacks = {
 	-- smekalka = 1, -- Teach Russian ingenuity to the dozers...
 	-- dark_cameras = 1, -- Cameras go dark.
 	-- hacky_hack_hostage_speed = 1, -- TESTING. Might end up becoming permanent, if it gets governed by a skill properly.
+	-- phantom_zone = 1, -- Put everyone into the Phantom Zone where time moves slower (except for you). Walking speed is slow.
 
 	-- Alternate game modes:
 	-- insurance = 1, -- Buy murder insurance before you go.
@@ -263,6 +264,25 @@ if modday2_hacks.no_mission_control then
 	modday2_hacks.dark_cameras = 1
 	modday2_hacks.wireframes_enemies = 1
 	-- TODO: Figure out how to prevent the call-in on missions where removing X cops triggers another
+end
+
+-- Adjust movement speeds.
+if modday2_hacks.phantom_zone then
+	for _, chartype in pairs(tweak_data.character) do
+		if type(chartype) == "table" and chartype.move_speed then
+			for _, poses in pairs(chartype.move_speed) do
+				for _, hastes in pairs(poses) do
+					for _, stances in pairs(hastes) do
+						if type(stances) == "table" and stances.fwd then
+							stances.strafe = 1
+							stances.fwd = 1
+							stances.bwd = 1
+						end
+					end
+				end
+			end
+		end
+	end
 end
 
 -- Glasses off, everyone. You can't see a thing.
