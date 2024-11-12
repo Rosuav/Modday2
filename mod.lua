@@ -24,6 +24,7 @@ modday2_hacks = {
 	-- dark_cameras = 1, -- Cameras go dark.
 	-- hacky_hack_hostage_speed = 1, -- TESTING. Might end up becoming permanent, if it gets governed by a skill properly.
 	-- phantom_zone = 1, -- Put everyone into the Phantom Zone where time moves slower (except for you). Walking speed is slow.
+	sticky_pagers = 1, -- Pager buttons don't let go easily. Press E to answer a pager, don't need to hold it.
 
 	-- Alternate game modes:
 	-- insurance = 1, -- Buy murder insurance before you go.
@@ -115,6 +116,10 @@ function check_compass(self, input, mode)
 		end
 		say("You are " .. mode .. " and facing: " .. label)
 		-- managers.experience:give_experience(1000, true)
+	end
+	if modday2_hacks.sticky_pagers and self:_interacting() and self._interact_params.tweak_data == "corpse_alarm_pager" and input.btn_interact_release then
+		-- You just let go of the pager? No you didn't.
+		input.btn_interact_release = nil
 	end
 end
 
