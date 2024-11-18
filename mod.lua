@@ -117,7 +117,7 @@ function check_compass(self, input, mode)
 		say("You are " .. mode .. " and facing: " .. label)
 		-- managers.experience:give_experience(1000, true)
 	end
-	if modday2_hacks.sticky_pagers and self:_interacting() and self._interact_params.tweak_data == "corpse_alarm_pager" and input.btn_interact_release then
+	if modday2_hacks.sticky_pagers and input.btn_interact_release and self:_interacting() and self._interact_params.tweak_data == "corpse_alarm_pager" then
 		-- You just let go of the pager? No you didn't.
 		input.btn_interact_release = nil
 	end
