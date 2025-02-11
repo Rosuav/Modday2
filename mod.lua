@@ -302,6 +302,8 @@ if modday2_hacks.glasses_off then
 	for _, mode in pairs(tweak_data.attention.settings) do
 		mode.max_range = 1 -- centimeter also, presumably
 	end
+	-- Cloakers bug out and are still able to target you. So... stop 'em spawning. That'll do.
+	tweak_data.group_ai.special_unit_spawn_limits.spooc = 0
 end
 -- Replace armor with ingenuity, and I don't mean the helicopter
 if modday2_hacks.smekalka then
